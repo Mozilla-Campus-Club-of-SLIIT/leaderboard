@@ -8,6 +8,7 @@ import { relativeTime } from "@/utils/relative-time"
 import { CHANGESCORE_MULTIPLIER, COMMIT_MULTIPLIER } from "@/utils/scoring"
 import { useEffect, useState } from "react"
 import moxyLeaderboardImage from "@/assets/images/moxy-leaderboard.png"
+import avatarPlaceholder from "@/assets/images/placeholder.png"
 import Image from "next/image"
 
 export default function Home() {
@@ -139,7 +140,10 @@ export default function Home() {
               className="flex gap-4 items-center pointer text-indigo-600 hover:underline font-medium"
             >
               <img
-                src={(user.avatarUrl || null) as string}
+                                src={(user.avatarUrl || avatarPlaceholder.src) as string}
+                onError={(e) => {
+                  e.currentTarget.src = avatarPlaceholder.src
+                }}
                 className="w-10 h-auto rounded-full"
                 alt={user.name}
               />
