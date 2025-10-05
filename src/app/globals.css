@@ -1,17 +1,58 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f3f4f6;
-  --foreground: #171717;
+  --bg: #f3f4f6; /* light gray */
+  --fg: #0f172a; /* dark text */
+  --card: #ffffff; /* white */
+  --muted: #6b7280; /* gray-500 */
+  --border: #e5e7eb; /* gray-200 */
+  --purple: #7c3aed; /* purple-600 */
+  --green: #16a34a; /* green-600 */
+  --pink: #db2777; /* pink-600 */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
-  --font-mono: var(--font-inter);
+/* dark theme overrides */
+.dark {
+  --bg: #212a38; /* darker background */
+  --fg: #e6eef6; /* light text */
+  --card: #0b1220; /* dark card */
+  --muted: #94a3b8; /* muted light */
+  --border: #1f2937; /* gray-800 */
+  --purple: #c4b5fd; /* purple-200 */
+  --green: #86efac; /* green-200 */
+  --pink: #f9a8d4; /* pink-200 */
 }
 
 body {
-  @apply bg-background text-foreground font-sans;
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial);
 }
+
+/* ensure the Inter variable applied on html is used effectively */
+html[class*="--font-inter"] {
+  font-family: var(--font-inter) !important;
+}
+
+/* small utilities for components that previously used tailwind colors */
+.bg-card { background-color: var(--card); }
+.text-muted { color: var(--muted); }
+.border-theme { border-color: var(--border); }
+
+/* ensure images don't overflow */
+img { max-width: 100%; height: auto; }
+
+/* Logo switching: both images exist in DOM, CSS shows the correct one.
+   This avoids React hydration mismatches caused by client-only JS switching. */
+.logo-dark { display: none; }
+.logo-light { display: inline-block; }
+
+/* Respect system preference for initial render */
+@media (prefers-color-scheme: dark) {
+  .logo-dark { display: inline-block; }
+  .logo-light { display: none; }
+}
+
+/* If the root has .dark (our toggle) show dark logo */
+.dark .logo-dark { display: inline-block; }
+.dark .logo-light { display: none; }
