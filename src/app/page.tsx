@@ -65,13 +65,13 @@ export default function Home() {
             </div>
             <p className="mb-2">
               Here’s a spotlight on the most active contributors to the{" "}
-              <strong className="text-indigo-600">Mozilla Campus Club of SLIIT</strong>.
+              <a href="https://www.sliitmozilla.org/" className="org-link">Mozilla Campus Club of SLIIT</a>.
             </p>
             <p className="mb-6">
               Want to be featured? Contribute to our{" "}
               <a
                 href="https://github.com/Mozilla-Campus-Club-of-SLIIT/"
-                className="text-indigo-600 hover:underline font-medium"
+                className="accent-link font-medium"
               >
                 Github organization
               </a>{" "}
@@ -97,7 +97,7 @@ export default function Home() {
               Learn more about how we calculate this{" "}
               <a
                 href="https://github.com/Mozilla-Campus-Club-of-SLIIT/leaderboard/blob/main/src/utils/scoring.ts"
-                className="text-indigo-600 hover:underline font-medium"
+                className="accent-link font-medium"
                 target="_blank"
                 rel="noopener noreferrer"
               >

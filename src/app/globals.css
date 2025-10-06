@@ -9,11 +9,13 @@
   --purple: #7c3aed; /* purple-600 */
   --green: #16a34a; /* green-600 */
   --pink: #db2777; /* pink-600 */
+  --link: #4f46e5; /* indigo-600 (default light link) */
+  --org-link: #3b82f6; /* slightly brighter blue for organization name */
 }
 
 /* dark theme overrides */
 .dark {
-  --bg: #212a38; /* darker background */
+  --bg: #050505; /* darker background */
   --fg: #e6eef6; /* light text */
   --card: #0b1220; /* dark card */
   --muted: #94a3b8; /* muted light */
@@ -21,6 +23,8 @@
   --purple: #c4b5fd; /* purple-200 */
   --green: #86efac; /* green-200 */
   --pink: #f9a8d4; /* pink-200 */
+  --link: #ff9400; /* firefox orange for dark mode */
+  --org-link: #ffb366; /* lighter orange for org name in dark mode */
 }
 
 body {
@@ -38,6 +42,14 @@ html[class*="--font-inter"] {
 .bg-card { background-color: var(--card); }
 .text-muted { color: var(--muted); }
 .border-theme { border-color: var(--border); }
+
+/* accent link that adapts to light/dark via CSS variable */
+.accent-link { color: var(--link); }
+.accent-link:hover { text-decoration: underline; }
+
+/* organization name link style (separate variable so it can be tuned independently) */
+.org-link { color: var(--org-link); font-weight: 600; }
+.org-link:hover { text-decoration: underline; }
 
 /* ensure images don't overflow */
 img { max-width: 100%; height: auto; }
