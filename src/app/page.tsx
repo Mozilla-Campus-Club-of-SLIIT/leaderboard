@@ -59,8 +59,7 @@ export default function Home() {
       <section id="information" className="max-w-5xl m-auto px-6 pt-8">
         <div className="flex flex-col items-end justify-between md:flex-row gap-6">
           <div className="w-full md:w-1/2">
-            {" "}
-            <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--fg)' }}>Top Contributors</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Top Contributors</h3>
             <p className="mb-2">
               Here’s a spotlight on the most active contributors to the{" "}
               <a href="https://www.sliitmozilla.org/" className="org-link">Mozilla Campus Club of SLIIT</a>.
@@ -75,8 +74,9 @@ export default function Home() {
               </a>{" "}
               and climb the leaderboard.
             </p>
-            <h4 className="text-lg font-semibold mb-2" style={{ color: 'var(--fg)' }}>How Points Are Calculated</h4>
-            <pre className="rounded p-4 mb-4 text-sm font-mono overflow-x-auto" style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--fg)' }}>
+            {/* Desktop/tablet only */}
+            <h4 className="text-lg font-semibold text-gray-800 mb-2 md:block hidden">How Points Are Calculated</h4>
+            <pre className="bg-white border border-gray-300 rounded p-4 mb-2 text-sm font-mono text-gray-800 overflow-x-auto md:block hidden">
               <code>
                 <span style={{ color: 'var(--purple)' }} className="">score</span> = commitCount *{" "}
                 <span style={{ color: 'var(--green)' }}>{COMMIT_MULTIPLIER}</span> +{" "}
@@ -85,10 +85,10 @@ export default function Home() {
                 <span style={{ color: 'var(--green)' }}>{CHANGESCORE_MULTIPLIER}</span>
               </code>
             </pre>
-            <div className="mb-2 text-muted">
-              Where <b className="font-semibold">change score</b> is the quality of the changes made.
+            <div className="text-gray-700 mb-2 md:block hidden">
+              Where <b>change score</b> is the quality of the changes made.
             </div>
-            <p>
+            <p className="md:block hidden">
               Learn more about how we calculate this{" "}
               <a
                 href="https://github.com/Mozilla-Campus-Club-of-SLIIT/leaderboard/blob/main/src/utils/scoring.ts"
@@ -101,34 +101,18 @@ export default function Home() {
               .
             </p>
           </div>
-          <div className="flex-shrink-0 w-full md:w-sm">
+          {/* Desktop/tablet only */}
+          <div className="flex-shrink-0 w-full md:max-w-md md:block hidden">
             <Image
               src={moxyLeaderboardImage}
               alt="Moxy looking at leaderboard"
-              className="w-xs h-auto"
+              className="w-full h-auto max-w-md"
             />
           </div>
         </div>
       </section>
 
-      <section id="ratelimit" className="m-auto max-w-5xl text-xs text-gray-400 px-6 pt-4">
-        <div>
-          API usage:{" "}
-          {isLastUpdatedLoading ? (
-            "loading..."
-          ) : (
-            <>
-              {ratelimit.used} / {ratelimit.limit}
-            </>
-          )}
-        </div>
-        <div>
-          Last updated{" "}
-          <abbr title={new Date(lastUpdated).toLocaleString()} className="italic">
-            {timeAgo}
-          </abbr>
-        </div>
-      </section>
+      
 
       <section id="leaderboard" className="m-auto max-w-5xl px-6 py-4">
         <Table<User>
@@ -170,6 +154,62 @@ export default function Home() {
             ["Overall score"]: "overallScore",
           }}
         />
+      </section>
+      <section id="ratelimit" className="m-auto max-w-5xl text-xs text-gray-400 px-6 pt-4">
+        <div>
+          API usage:{" "}
+          {isLastUpdatedLoading ? (
+            "loading..."
+          ) : (
+            <>
+              {ratelimit.used} / {ratelimit.limit}
+            </>
+          )}
+        </div>
+        <div>
+          Last updated{" "}
+          <abbr title={new Date(lastUpdated).toLocaleString()} className="italic">
+            {timeAgo}
+          </abbr>
+        </div>
+        {/* Mobile only */}
+        <div className="block md:hidden mt-6">
+          <h4 className="text-lg font-semibold text-gray-800 mb-2">How Points Are Calculated</h4>
+          <pre className="bg-white border border-gray-300 rounded p-4 mb-2 text-sm font-mono text-gray-800 overflow-x-auto">
+            <code>
+              <span className="text-purple-600">score</span> = commitCount *{" "}
+              <span className="text-green-600">{COMMIT_MULTIPLIER}</span> +{" "}
+              <span className="text-pink-600">log10</span>
+              (changeScore + <span className="text-green-600">1</span>) *{" "}
+              <span className="text-green-600">{CHANGESCORE_MULTIPLIER}</span>
+            </code>
+          </pre>
+          <div className="text-gray-700 mb-2">
+            Where <b>change score</b> is the quality of the changes made.
+          </div>
+          <p>
+            Learn more about how we calculate this{" "}
+            <a
+              href="https://github.com/Mozilla-Campus-Club-of-SLIIT/leaderboard/blob/main/src/utils/scoring.ts"
+              className="text-indigo-600 hover:underline font-medium"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              on GitHub
+            </a>
+            .
+          </p>
+          <div className="w-full flex justify-center mt-4">
+            <Image
+              src={moxyLeaderboardImage}
+              alt="Moxy looking at leaderboard"
+              className="w-full h-auto max-w-md"
+            />
+          </div>
+        </div>
+      </section>
+      <section className="w-full text-center py-6 text-sm text-gray-500">
+          © {new Date().getFullYear()} Mozilla Campus Club of SLIIT. Made with <span className="text-red-500">❤️</span> by SLIIT Mozillians
       </section>
     </main>
   )

@@ -15,15 +15,21 @@ This project uses upstash redis as a storage and caching mechanism. Please check
 
 #### If you are intending to run Upstash redis locally
 
-Execute the following command to setup upstash
+Execute the following command to setup redis and upstash. This setup uses docker (recommended)
 ```bash
-sudo docker run -d \
+docker network create redis-net
+
+# Run Redis in Docker
+docker run -d --name redis --network redis-net redis:latest
+
+# Run SRH container
+docker run -d \
   --name srh \
   --network redis-net \
   -p 8080:80 \
   -e SRH_MODE=env \
   -e SRH_TOKEN=redis \
-  -e SRH_CONNECTION_STRING=redis://your_host:6379 \
+  -e SRH_CONNECTION_STRING=redis://redis:6379 \
   hiett/serverless-redis-http:latest
 ```
 
