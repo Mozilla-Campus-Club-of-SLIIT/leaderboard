@@ -133,23 +133,37 @@ export default function Home() {
           isLoading={isLeaderboardLoading}
           renderFunction={(user: User, index: number) => [
             index + 1,
-            <a
-              key={`link-${index}`}
-              href={user.htmlUrl as string}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex gap-4 items-center pointer text-indigo-600 hover:underline font-medium"
-            >
-              <img
-                src={(user.avatarUrl || avatarPlaceholder.src) as string}
-                onError={(e) => {
-                  e.currentTarget.src = avatarPlaceholder.src
-                }}
-                className="w-10 h-auto rounded-full"
-                alt={user.name}
-              />
-              <div>{user.name}</div>
-            </a>,
+            user.htmlUrl ? (
+              <a
+                key={`link-${index}`}
+                href={user.htmlUrl as string}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex gap-4 items-center pointer text-indigo-600 hover:underline font-medium group relative"
+              >
+                <img
+                  src={(user.avatarUrl || avatarPlaceholder.src) as string}
+                  onError={(e) => {
+                    e.currentTarget.src = avatarPlaceholder.src
+                  }}
+                  className="w-10 h-auto rounded-full"
+                  alt={user.name}
+                />
+                <div>{user.name}</div>
+              </a>
+            ) : (
+              <div key={`link-${index}`} className="flex gap-4 items-center group relative">
+                <div className="pointer-events-none absolute duration-200 transition-opacity opacity-0 group-hover:opacity-100 bottom-full -left-10 mb-2 block bg-gray-800 text-white text-sm rounded px-2 py-1">
+                  Deactivated Account
+                </div>
+                <img
+                  src={avatarPlaceholder.src}
+                  className="w-10 h-auto rounded-full"
+                  alt={user.name}
+                />
+                <div>{user.name}</div>
+              </div>
+            ),
             <div className="text-right" key={`commits-${index}`}>
               {user.commits}
             </div>,
