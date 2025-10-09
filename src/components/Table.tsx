@@ -77,7 +77,8 @@ export default function Table<T>({
     if (column === sortingColumn) setSortingAscending((prev) => !prev)
     else {
       setSortingColumn(column)
-      setSortingAscending(defaultSortingColumn === "ascending")
+      // setSortingAscending(defaultSortingColumn === "ascending")
+      setSortingAscending(defaultSortingMethod === "ascending")
     }
   }
 
