@@ -47,7 +47,7 @@ export default function Table<T>({
       // and then rest is going to look just like what we have below
       setSortedRows(rows)
     } else if (typeof rows[0] === "object") {
-      sortedResult = rows.sort((a: T, b: T) => {
+      sortedResult = [...rows].sort((a: T, b: T) => {
         const key = columnToKeyMap?.[sortingColumn] ?? null
         if (!key) return 0
 
