@@ -161,7 +161,7 @@ export default function Home() {
               {user.overallScore.toFixed(2)}
             </div>,
           ]}
-          rows={leaderboard}
+          rows={sortedLeaderboard}
           columnToKeyMap={{
             ["Commits"]: "commits",
             ["Change score"]: "changeScore",
