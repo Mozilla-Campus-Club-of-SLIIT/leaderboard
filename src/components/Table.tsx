@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react"
+import { ReactNode, useEffect, useState, useMemo } from "react"
 
 type SortingMethod = "ascending" | "descending"
 
@@ -11,6 +11,9 @@ type TableProps<T> = {
   defaultSortingMethod?: SortingMethod
   columnToKeyMap?: Record<string, string>
   renderFunction?: (row: T, rowIndex: number) => (string | number | ReactNode)[]
+  currentPage?: number
+  itemsPerPage?: number
+  onPageChange?: (page: number) => void
 }
 
 export default function Table<T>({
@@ -22,11 +25,22 @@ export default function Table<T>({
   defaultSortingMethod,
   columnToKeyMap,
   renderFunction,
+  currentPage = 1,
+  itemsPerPage,
+  onPageChange,
 }: TableProps<T>) {
   const [sortingColumn, setSortingColumn] = useState(defaultSortingColumn)
   const [sortingAscending, setSortingAscending] = useState(defaultSortingMethod === "ascending")
   const [mappedRows, setMappedRows] = useState<ReactNode[][]>([])
   const [sortedRows, setSortedRows] = useState<T[]>([])
+  
+  const totalPages = itemsPerPage ? Math.ceil(rows.length / itemsPerPage) : 1
+  const paginatedRows = useMemo(() => 
+    itemsPerPage 
+      ? sortedRows.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+      : sortedRows,
+    [sortedRows, currentPage, itemsPerPage]
+  )
 
   useEffect(() => {
     if (!sortColumns || sortColumns.length === 0 || !sortingColumn) return setSortedRows(rows)
@@ -70,8 +84,22 @@ export default function Table<T>({
   }, [columnToKeyMap, headers, sortingAscending, sortColumns, sortingColumn, rows])
 
   useEffect(() => {
-    if (renderFunction) setMappedRows(sortedRows.map(renderFunction))
-  }, [renderFunction, sortedRows])
+    if (renderFunction) {
+      setMappedRows(paginatedRows.map((row, idx) => 
+        renderFunction(row, (currentPage - 1) * (itemsPerPage || 0) + idx)
+      ))
+    }
+  }, [renderFunction, paginatedRows, currentPage, itemsPerPage])
+
+  useEffect(() => {
+    if (!itemsPerPage || !onPageChange) return
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft" && currentPage > 1) onPageChange(currentPage - 1)
+      if (e.key === "ArrowRight" && currentPage < totalPages) onPageChange(currentPage + 1)
+    }
+    window.addEventListener("keydown", handleKey)
+    return () => window.removeEventListener("keydown", handleKey)
+  }, [currentPage, totalPages, itemsPerPage, onPageChange])
 
   const changeSorting = (column: string) => {
     if (column === sortingColumn) setSortingAscending((prev) => !prev)
@@ -146,6 +174,57 @@ export default function Table<T>({
           )}
         </tbody>
       </table>
+      
+      {itemsPerPage && totalPages > 1 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-gray-200">
+          <div className="text-sm text-gray-700">
+            Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+            {Math.min(currentPage * itemsPerPage, rows.length)} of {rows.length} entries
+          </div>
+          
+          <div className="flex flex-wrap gap-1 justify-center">
+            <button
+              onClick={() => onPageChange?.(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-3 py-1 text-sm rounded border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+            
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter(page => 
+                page === 1 || 
+                page === totalPages || 
+                Math.abs(page - currentPage) <= 2
+              )
+              .map((page, idx, arr) => (
+                <span key={page}>
+                  {idx > 0 && arr[idx - 1] !== page - 1 && (
+                    <span className="px-2 py-1 text-sm text-gray-500">...</span>
+                  )}
+                  <button
+                    onClick={() => onPageChange?.(page)}
+                    className={`px-3 py-1 text-sm rounded border ${
+                      page === currentPage
+                        ? "bg-indigo-600 text-white border-indigo-600"
+                        : "border-gray-300 bg-white hover:bg-gray-50"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                </span>
+              ))}
+            
+            <button
+              onClick={() => onPageChange?.(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 text-sm rounded border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

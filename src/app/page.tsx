@@ -7,12 +7,18 @@ import { User } from "@/types/user"
 import { relativeTime } from "@/utils/relative-time"
 import { CHANGESCORE_MULTIPLIER, COMMIT_MULTIPLIER } from "@/utils/scoring"
 import { useEffect, useState } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
 import moxyLeaderboardImage from "@/assets/images/moxy-leaderboard.png"
 import Image from "next/image"
 
 export default function Home() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const pageParam = Number(searchParams.get('page')) || 1
+  
   const [refreshRatelimit, setRefreshRatelimit] = useState(false)
   const [refreshLastUpdated, setRefreshLastUpdated] = useState(false)
+  const [currentPage, setCurrentPage] = useState(pageParam)
 
   const [leaderboard, , isLeaderboardLoading] = useFetch<User[]>(
     "/api/leaderboard",
@@ -27,6 +33,11 @@ export default function Home() {
   )
   const [timeAgo, setTimeAgo] = useState(relativeTime(lastUpdated))
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    router.push(`?page=${page}`)
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
       setTimeAgo(relativeTime(lastUpdated))
@@ -40,6 +51,10 @@ export default function Home() {
     setRefreshLastUpdated((prev) => !prev)
     setTimeAgo(relativeTime(lastUpdated))
   }, [isLeaderboardLoading, lastUpdated])
+
+  useEffect(() => {
+    setCurrentPage(pageParam)
+  }, [pageParam])
 
   return (
     <main className="bg-gray-50 text-gray-800 min-h-screen font-sans">
@@ -145,6 +160,9 @@ export default function Home() {
             ["Change score"]: "changeScore",
             ["Overall score"]: "overallScore",
           }}
+          currentPage={currentPage}
+          itemsPerPage={10}
+          onPageChange={handlePageChange}
         />
       </section>
       <section id="ratelimit" className="m-auto max-w-5xl text-xs text-gray-400 px-6 pt-4">
@@ -160,7 +178,7 @@ export default function Home() {
         </div>
         <div>
           Last updated{" "}
-          <abbr title={new Date(lastUpdated).toLocaleString()} className="italic">
+          <abbr title={new Date(lastUpdated).toLocaleString()} className="italic" suppressHydrationWarning>
             {timeAgo}
           </abbr>
         </div>
