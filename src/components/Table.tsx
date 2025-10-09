@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useState, useMemo } from "react"
+import { generatePageNumbers } from "@/utils/pagination"
 
 type SortingMethod = "ascending" | "descending"
 
@@ -14,6 +15,8 @@ type TableProps<T> = {
   currentPage?: number
   itemsPerPage?: number
   onPageChange?: (page: number) => void
+  siblingCount?: number
+  boundaryCount?: number
 }
 
 export default function Table<T>({
@@ -28,6 +31,8 @@ export default function Table<T>({
   currentPage = 1,
   itemsPerPage,
   onPageChange,
+  siblingCount = 1,
+  boundaryCount = 1,
 }: TableProps<T>) {
   const [sortingColumn, setSortingColumn] = useState(defaultSortingColumn)
   const [sortingAscending, setSortingAscending] = useState(defaultSortingMethod === "ascending")
@@ -35,6 +40,8 @@ export default function Table<T>({
   const [sortedRows, setSortedRows] = useState<T[]>([])
   
   const totalPages = itemsPerPage ? Math.ceil(rows.length / itemsPerPage) : 1
+  const btnBase = "px-2 sm:px-3 py-1 text-sm rounded border shrink-0"
+  const btnNav = `${btnBase} border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed`
   const paginatedRows = useMemo(() => 
     itemsPerPage 
       ? sortedRows.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
@@ -110,8 +117,9 @@ export default function Table<T>({
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
-      <table className="min-w-full text-sm text-left text-gray-700">
+    <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="overflow-x-auto">
+        <table className="min-w-full text-sm text-left text-gray-700">
         <thead className="bg-gray-100 text-gray-600 uppercase tracking-wider">
           <tr>
             {headers.map((header, index) => (
@@ -174,51 +182,48 @@ export default function Table<T>({
           )}
         </tbody>
       </table>
+      </div>
       
       {itemsPerPage && totalPages > 1 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-gray-200">
-          <div className="text-sm text-gray-700">
+          <div className="text-sm text-gray-700 text-center sm:text-left">
             Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
             {Math.min(currentPage * itemsPerPage, rows.length)} of {rows.length} entries
           </div>
           
-          <div className="flex flex-wrap gap-1 justify-center">
+          <div className="flex flex-wrap gap-1 justify-center max-w-full">
             <button
               onClick={() => onPageChange?.(currentPage - 1)}
               disabled={currentPage === 1}
-              className="px-3 py-1 text-sm rounded border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className={btnNav}
             >
               Previous
             </button>
             
-            {Array.from({ length: totalPages }, (_, i) => i + 1)
-              .filter(page => 
-                page === 1 || 
-                page === totalPages || 
-                Math.abs(page - currentPage) <= 2
-              )
-              .map((page, idx, arr) => (
-                <span key={page}>
-                  {idx > 0 && arr[idx - 1] !== page - 1 && (
-                    <span className="px-2 py-1 text-sm text-gray-500">...</span>
-                  )}
-                  <button
-                    onClick={() => onPageChange?.(page)}
-                    className={`px-3 py-1 text-sm rounded border ${
-                      page === currentPage
-                        ? "bg-indigo-600 text-white border-indigo-600"
-                        : "border-gray-300 bg-white hover:bg-gray-50"
-                    }`}
-                  >
-                    {page}
-                  </button>
+            {generatePageNumbers(currentPage, totalPages, siblingCount, boundaryCount).map((item, idx) => 
+              item === 'ellipsis' ? (
+                <span key={`ellipsis-${idx}`} className="px-1 sm:px-2 py-1 text-sm text-gray-500 shrink-0">
+                  ...
                 </span>
-              ))}
+              ) : (
+                <button
+                  key={item}
+                  onClick={() => onPageChange?.(item)}
+                  className={`${btnBase} ${
+                    item === currentPage
+                      ? "bg-indigo-600 text-white border-indigo-600"
+                      : "border-gray-300 bg-white hover:bg-gray-50"
+                  }`}
+                >
+                  {item}
+                </button>
+              )
+            )}
             
             <button
               onClick={() => onPageChange?.(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="px-3 py-1 text-sm rounded border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className={btnNav}
             >
               Next
             </button>
