@@ -104,8 +104,8 @@ export default function Table<T>({
       if (e.key === "ArrowLeft" && currentPage > 1) onPageChange(currentPage - 1)
       if (e.key === "ArrowRight" && currentPage < totalPages) onPageChange(currentPage + 1)
     }
-    window.addEventListener("keydown", handleKey)
-    return () => window.removeEventListener("keydown", handleKey)
+    globalThis.addEventListener("keydown", handleKey)
+    return () => globalThis.removeEventListener("keydown", handleKey)
   }, [currentPage, totalPages, itemsPerPage, onPageChange])
 
   const changeSorting = (column: string) => {
@@ -200,9 +200,9 @@ export default function Table<T>({
               Previous
             </button>
             
-            {generatePageNumbers(currentPage, totalPages, siblingCount, boundaryCount).map((item, idx) => 
+            {generatePageNumbers(currentPage, totalPages, siblingCount, boundaryCount, 5).map((item, idx) => 
               item === 'ellipsis' ? (
-                <span key={`ellipsis-${idx}`} className="px-1 sm:px-2 py-1 text-sm text-gray-500 shrink-0">
+                <span key={`ellipsis-${item}`} className="px-1 sm:px-2 py-1 text-sm text-gray-500 shrink-0">
                   ...
                 </span>
               ) : (

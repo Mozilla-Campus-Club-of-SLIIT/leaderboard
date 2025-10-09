@@ -8,17 +8,19 @@ export type PageItem = number | 'ellipsis'
  * @param total - Total number of pages
  * @param siblingCount - Pages to show on each side of current page
  * @param boundaryCount - Pages to show at start and end
+ * @param truncationThreshold - Minimum pages before showing ellipsis (default: 5)
  * @returns Array of page numbers and 'ellipsis' strings for gaps
  */
 export function generatePageNumbers(
   current: number,
   total: number,
   siblingCount: number,
-  boundaryCount: number
+  boundaryCount: number,
+  truncationThreshold: number = 5
 ): PageItem[] {
   const totalNumbers = boundaryCount * 2 + siblingCount * 2 + 3
   
-  if (total <= totalNumbers) {
+  if (total < truncationThreshold) {
     return Array.from({ length: total }, (_, i) => i + 1)
   }
 
