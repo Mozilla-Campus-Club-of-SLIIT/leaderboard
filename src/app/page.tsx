@@ -21,6 +21,9 @@ export default function Home() {
     [] as User[],
     false,
   )
+  const sortedLeaderboard = [...leaderboard].sort(
+  (a, b) => b.overallScore - a.overallScore
+);
   const [ratelimit] = useFetch<RateLimit>("/api/leaderboard/ratelimit", {}, refreshRatelimit)
   const [lastUpdated, , isLastUpdatedLoading] = useFetch<number>(
     "/api/leaderboard/last-update",
