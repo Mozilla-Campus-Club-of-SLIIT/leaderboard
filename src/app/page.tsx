@@ -127,9 +127,12 @@ export default function Home() {
           defaultSortingColumn="Overall score"
           defaultSortingMethod="descending"
           isLoading={isLeaderboardLoading}
-          renderFunction={(user: User, index: number) => [
-            index + 1,
-            user.htmlUrl ? (
+          renderFunction={(user: User, index: number) => {
+  const key = (user.htmlUrl as string) || user.name;
+  const rank = overallRankByKey.get(key) ?? index + 1; // fallback if not found
+  return [
+    rank, // <- stable rank based on overall score
+    user.htmlUrl ? (
               <a
                 key={`link-${index}`}
                 href={user.htmlUrl as string}
@@ -169,7 +172,7 @@ export default function Home() {
             <div className="text-right" key={`overall-${index}`}>
               {user.overallScore.toFixed(2)}
             </div>,
-          ]}
+          ]}}
           rows={sortedLeaderboard}
           columnToKeyMap={{
             ["Commits"]: "commits",
