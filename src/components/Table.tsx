@@ -202,7 +202,7 @@ export default function Table<T>({
             
             {generatePageNumbers(currentPage, totalPages, siblingCount, boundaryCount, 5).map((item, idx) => 
               item === 'ellipsis' ? (
-                <span key={`ellipsis-${item}`} className="px-1 sm:px-2 py-1 text-sm text-gray-500 shrink-0">
+                <span key={`ellipsis-${idx}`} className="px-1 sm:px-2 py-1 text-sm text-gray-500 shrink-0">
                   ...
                 </span>
               ) : (
