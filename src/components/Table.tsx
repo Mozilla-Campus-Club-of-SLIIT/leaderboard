@@ -31,7 +31,7 @@ export default function Table<T>({
   currentPage = 1,
   itemsPerPage,
   onPageChange,
-  siblingCount = 1,
+  siblingCount = 0,
   boundaryCount = 1,
 }: TableProps<T>) {
   const [sortingColumn, setSortingColumn] = useState(defaultSortingColumn)

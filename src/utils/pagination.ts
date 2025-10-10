@@ -26,8 +26,13 @@ export function generatePageNumbers(
 
   const leftBoundary = boundaryCount
   const rightBoundary = total - boundaryCount + 1
-  const leftSibling = Math.max(current - siblingCount, 1)
-  const rightSibling = Math.min(current + siblingCount, total)
+  let leftSibling = Math.max(current - siblingCount, 1)
+  let rightSibling = Math.min(current + siblingCount, total)
+
+  // Add extra sibling if on first or last page
+  if (current === 1) rightSibling = Math.min(rightSibling + 1, total)
+  if (current === total) leftSibling = Math.max(leftSibling - 1, 1)
+
 
   const showLeftEllipsis = leftSibling > leftBoundary + 1
   const showRightEllipsis = rightSibling < rightBoundary - 1
