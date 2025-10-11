@@ -11,6 +11,8 @@ import moxyLeaderboardImage from "@/assets/images/moxy-leaderboard.png"
 import avatarPlaceholder from "@/assets/images/placeholder.png"
 
 import Image from "next/image"
+import ThemeToggle from "@/components/ThemeToggle"
+import Logo from "@/components/Logo"
 
 export default function Home() {
   const [refreshRatelimit, setRefreshRatelimit] = useState(false)
@@ -44,10 +46,16 @@ export default function Home() {
   }, [isLeaderboardLoading, lastUpdated])
 
   return (
-    <main className="bg-gray-50 text-gray-800 min-h-screen font-sans">
-      <header className="bg-white sticky top-0 z-50 flex items-center gap-4 px-6 py-4 shadow-sm border-b border-gray-200">
-        <img src="/logo.png" alt="SLIIT Mozilla Logo" className="w-16 h-auto" />
-        <h1 className="text-xl font-semibold text-gray-900">SLIIT Mozilla GitHub Leaderboard</h1>
+    <main className="min-h-screen font-sans" style={{ background: "var(--bg)", color: "var(--fg)" }}>
+      <header className="sticky top-0 z-50 flex items-center gap-4 px-6 py-4 shadow-sm border-b" style={{ background: "var(--card)", borderColor: "var(--border)" }}>
+        <div className="flex items-center gap-4">
+          {/* Logo switches automatically between light and dark variants */}
+          <Logo className="w-16 h-auto" />
+          <h1 className="text-xl font-semibold" style={{ color: "var(--fg)" }}>SLIIT Mozilla GitHub Leaderboard</h1>
+        </div>
+        <div className="ml-auto">
+          <ThemeToggle />
+        </div>
       </header>
 
       <section id="information" className="max-w-5xl m-auto px-6 pt-8">
@@ -56,13 +64,13 @@ export default function Home() {
             <h3 className="text-2xl font-bold text-gray-900 mb-2">Top Contributors</h3>
             <p className="mb-2">
               Here’s a spotlight on the most active contributors to the{" "}
-              <strong className="text-indigo-600">Mozilla Campus Club of SLIIT</strong>.
+              <a href="https://www.sliitmozilla.org/" className="org-link">Mozilla Campus Club of SLIIT</a>.
             </p>
             <p className="mb-6">
               Want to be featured? Contribute to our{" "}
               <a
                 href="https://github.com/Mozilla-Campus-Club-of-SLIIT/"
-                className="text-indigo-600 hover:underline font-medium"
+                className="accent-link font-medium"
               >
                 Github organization
               </a>{" "}
@@ -72,11 +80,11 @@ export default function Home() {
             <h4 className="text-lg font-semibold text-gray-800 mb-2 md:block hidden">How Points Are Calculated</h4>
             <pre className="bg-white border border-gray-300 rounded p-4 mb-2 text-sm font-mono text-gray-800 overflow-x-auto md:block hidden">
               <code>
-                <span className="text-purple-600">score</span> = commitCount *{" "}
-                <span className="text-green-600">{COMMIT_MULTIPLIER}</span> +{" "}
-                <span className="text-pink-600">log10</span>
-                (changeScore + <span className="text-green-600">1</span>) *{" "}
-                <span className="text-green-600">{CHANGESCORE_MULTIPLIER}</span>
+                <span style={{ color: 'var(--purple)' }} className="">score</span> = commitCount *{" "}
+                <span style={{ color: 'var(--green)' }}>{COMMIT_MULTIPLIER}</span> +{" "}
+                <span style={{ color: 'var(--pink)' }}>log10</span>
+                (changeScore + <span style={{ color: 'var(--green)' }}>1</span>) *{" "}
+                <span style={{ color: 'var(--green)' }}>{CHANGESCORE_MULTIPLIER}</span>
               </code>
             </pre>
             <div className="text-gray-700 mb-2 md:block hidden">
@@ -86,7 +94,7 @@ export default function Home() {
               Learn more about how we calculate this{" "}
               <a
                 href="https://github.com/Mozilla-Campus-Club-of-SLIIT/leaderboard/blob/main/src/utils/scoring.ts"
-                className="text-indigo-600 hover:underline font-medium"
+                className="accent-link font-medium"
                 target="_blank"
                 rel="noopener noreferrer"
               >
