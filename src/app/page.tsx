@@ -1,6 +1,7 @@
 "use client"
 
 import Table from "@/components/Table"
+import Header from "@/components/Header"
 import useFetch from "@/hooks/useFetch"
 import RateLimit from "@/types/ratelimit"
 import { User } from "@/types/user"
@@ -45,11 +46,7 @@ export default function Home() {
 
   return (
     <main className="bg-gray-50 text-gray-800 min-h-screen font-sans">
-      <header className="bg-white sticky top-0 z-50 flex items-center gap-4 px-6 py-4 shadow-sm border-b border-gray-200">
-        <img src="/logo.png" alt="SLIIT Mozilla Logo" className="w-16 h-auto" />
-        <h1 className="text-xl font-semibold text-gray-900">SLIIT Mozilla GitHub Leaderboard</h1>
-      </header>
-
+      <Header />
       <section id="information" className="max-w-5xl m-auto px-6 pt-8">
         <div className="flex flex-col items-end justify-between md:flex-row gap-6">
           <div className="w-full md:w-1/2">
@@ -69,7 +66,9 @@ export default function Home() {
               and climb the leaderboard.
             </p>
             {/* Desktop/tablet only */}
-            <h4 className="text-lg font-semibold text-gray-800 mb-2 md:block hidden">How Points Are Calculated</h4>
+            <h4 className="text-lg font-semibold text-gray-800 mb-2 md:block hidden">
+              How Points Are Calculated
+            </h4>
             <pre className="bg-white border border-gray-300 rounded p-4 mb-2 text-sm font-mono text-gray-800 overflow-x-auto md:block hidden">
               <code>
                 <span className="text-purple-600">score</span> = commitCount *{" "}
@@ -105,8 +104,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      
 
       <section id="leaderboard" className="m-auto max-w-5xl px-6 py-4">
         <Table<User>
@@ -220,7 +217,8 @@ export default function Home() {
         </div>
       </section>
       <section className="w-full text-center py-6 text-sm text-gray-500">
-          © {new Date().getFullYear()} Mozilla Campus Club of SLIIT. Made with <span className="text-red-500">❤️</span> by SLIIT Mozillians
+        © {new Date().getFullYear()} Mozilla Campus Club of SLIIT. Made with{" "}
+        <span className="text-red-500">❤️</span> by SLIIT Mozillians
       </section>
     </main>
   )
