@@ -1,5 +1,5 @@
-"use client";
-import React from "react";
+"use client"
+import React from "react"
 
 export default function Header() {
   return (
@@ -7,9 +7,7 @@ export default function Header() {
       {/* Left Section: Logo + Title */}
       <div className="flex items-center gap-4">
         <img src="/logo.png" alt="SLIIT Mozilla Logo" className="w-16 h-auto" />
-        <h1 className="text-xl font-semibold text-gray-900">
-          SLIIT Mozilla GitHub Leaderboard
-        </h1>
+        <h1 className="text-xl font-semibold text-gray-900">SLIIT Mozilla GitHub Leaderboard</h1>
       </div>
 
       {/* Right Section: Social Media Icons */}
@@ -130,5 +128,5 @@ export default function Header() {
         </a>
       </div>
     </header>
-  );
+  )
 }
