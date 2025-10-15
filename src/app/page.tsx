@@ -1,7 +1,11 @@
 "use client"
 
 import Table from "@/components/Table"
+<<<<<<< HEAD
 import LeaderboardFilter from "@/components/LeaderboardFilter"
+=======
+import Header from "@/components/Header"
+>>>>>>> 2dcd77a (feat(#8): add Header component import to Home page)
 import useFetch from "@/hooks/useFetch"
 import RateLimit from "@/types/ratelimit"
 import { User } from "@/types/user"
