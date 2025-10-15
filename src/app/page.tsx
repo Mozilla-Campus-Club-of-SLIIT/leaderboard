@@ -56,7 +56,7 @@ export default function Home() {
 
   return (
     <main className="bg-gray-50 text-gray-800 min-h-screen font-sans">
-
+      <Header />
       <section id="information" className="max-w-5xl m-auto px-6 pt-8">
         <div className="flex flex-col items-end justify-between md:flex-row gap-6">
           <div className="w-full md:w-1/2">
