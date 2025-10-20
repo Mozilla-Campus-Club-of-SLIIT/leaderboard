@@ -148,13 +148,13 @@ export default function Home() {
                 <div>{user.name}</div>
               </div>
             ),
-            <div className="text-right" key={`commits-${index}`}>
+            <div className="text-center" key={`commits-${index}`}>
               {user.commits}
             </div>,
-            <div className="text-right" key={`change-${index}`}>
+            <div className="text-center" key={`change-${index}`}>
               {user.changeScore.toFixed(2)}
             </div>,
-            <div className="text-right" key={`overall-${index}`}>
+            <div className="text-center" key={`overall-${index}`}>
               {user.overallScore.toFixed(2)}
             </div>,
           ]}
