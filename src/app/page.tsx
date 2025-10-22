@@ -8,6 +8,8 @@ import { relativeTime } from "@/utils/relative-time"
 import { CHANGESCORE_MULTIPLIER, COMMIT_MULTIPLIER } from "@/utils/scoring"
 import { useEffect, useState } from "react"
 import moxyLeaderboardImage from "@/assets/images/moxy-leaderboard.png"
+import avatarPlaceholder from "@/assets/images/placeholder.png"
+
 import Image from "next/image"
 import ThemeToggle from "@/components/ThemeToggle"
 import Logo from "@/components/Logo"
@@ -123,27 +125,44 @@ export default function Home() {
           isLoading={isLeaderboardLoading}
           renderFunction={(user: User, index: number) => [
             index + 1,
-            <a
-              key={`link-${index}`}
-              href={user.htmlUrl as string}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex gap-4 items-center pointer text-indigo-600 hover:underline font-medium"
-            >
-              <img
-                src={(user.avatarUrl || null) as string}
-                className="w-10 h-auto rounded-full"
-                alt={user.name}
-              />
-              <div>{user.name}</div>
-            </a>,
-            <div className="text-right" key={`commits-${index}`}>
+            user.htmlUrl ? (
+              <a
+                key={`link-${index}`}
+                href={user.htmlUrl as string}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex gap-4 items-center pointer text-indigo-600 hover:underline font-medium group relative"
+              >
+                <img
+                  src={(user.avatarUrl || avatarPlaceholder.src) as string}
+                  onError={(e) => {
+                    e.currentTarget.src = avatarPlaceholder.src
+                  }}
+                  className="w-10 h-auto rounded-full"
+                  alt={user.name}
+                />
+                <div>{user.name}</div>
+              </a>
+            ) : (
+              <div key={`link-${index}`} className="flex gap-4 items-center group relative">
+                <div className="pointer-events-none absolute duration-200 transition-opacity opacity-0 group-hover:opacity-100 bottom-full -left-10 mb-2 block bg-gray-800 text-white text-sm rounded px-2 py-1">
+                  Deactivated Account
+                </div>
+                <img
+                  src={avatarPlaceholder.src}
+                  className="w-10 h-auto rounded-full"
+                  alt={user.name}
+                />
+                <div>{user.name}</div>
+              </div>
+            ),
+            <div className="text-center" key={`commits-${index}`}>
               {user.commits}
             </div>,
-            <div className="text-right" key={`change-${index}`}>
+            <div className="text-center" key={`change-${index}`}>
               {user.changeScore.toFixed(2)}
             </div>,
-            <div className="text-right" key={`overall-${index}`}>
+            <div className="text-center" key={`overall-${index}`}>
               {user.overallScore.toFixed(2)}
             </div>,
           ]}
