@@ -3,9 +3,9 @@ import { updateLeaderboard } from "../update/route"
 import { User } from "@/types/user"
 import { filterCommitsByDate } from "@/utils/filterCommitsByDate"
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
-  const range = searchParams.get("range") || "all"
+export async function GET(request: Request, { params }: { params: { range: string } }) {
+  const validRanges = ["daily", "weekly", "monthly", "yearly", "all"];
+  const range = validRanges.includes(params.range) ? params.range : "all";
 
   let leaders = (await redis.get("leaders")) as User[] | null
   if (!leaders) await updateLeaderboard()

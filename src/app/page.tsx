@@ -20,7 +20,7 @@ export default function Home() {
   const [refreshLeaderboard, setRefreshLeaderboard] = useState(false);
 
   const [leaderboard, , isLeaderboardLoading] = useFetch<User[]>(
-    `/api/leaderboard/range?range=${view}`,
+    `/api/leaderboard/${view}`,
     [] as User[],
     refreshLeaderboard
   )
