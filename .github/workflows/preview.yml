@@ -1,0 +1,35 @@
+# https://github.com/sliit-foss/bashaway-official/blob/main/.github/workflows/preview-deploy.yml
+
+name: Deploy PR preview
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+concurrency:
+  group: preview-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-preview:
+    name: Deploy preview
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Build
+        run: |
+          npm install
+          npm run build
+
+      - name: Upload build files 📤
+        uses: sliit-foss/actions/preview-deployments/postbuild@main
+
+      - name: Deploy preview 🚀
+        uses: sliit-foss/actions/preview-deployments/deploy@main
+        with:
+          site_domain: leaderboard.sliitmozilla.org
