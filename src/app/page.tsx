@@ -1,6 +1,7 @@
 "use client"
 
 import Table from "@/components/Table"
+import LeaderboardFilter from "@/components/LeaderboardFilter";
 import useFetch from "@/hooks/useFetch"
 import RateLimit from "@/types/ratelimit"
 import { User } from "@/types/user"
@@ -15,11 +16,13 @@ import Image from "next/image"
 export default function Home() {
   const [refreshRatelimit, setRefreshRatelimit] = useState(false)
   const [refreshLastUpdated, setRefreshLastUpdated] = useState(false)
+  const [view, setView] = useState("all");
+  const [refreshLeaderboard, setRefreshLeaderboard] = useState(false);
 
   const [leaderboard, , isLeaderboardLoading] = useFetch<User[]>(
-    "/api/leaderboard",
+    `/api/leaderboard/${view}`,
     [] as User[],
-    false,
+    refreshLeaderboard
   )
   const [ratelimit] = useFetch<RateLimit>("/api/leaderboard/ratelimit", {}, refreshRatelimit)
   const [lastUpdated, , isLastUpdatedLoading] = useFetch<number>(
@@ -28,6 +31,10 @@ export default function Home() {
     refreshLastUpdated,
   )
   const [timeAgo, setTimeAgo] = useState(relativeTime(lastUpdated))
+
+  useEffect(() => {
+    setRefreshLeaderboard((prev) => !prev)
+  }, [view])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -53,7 +60,10 @@ export default function Home() {
       <section id="information" className="max-w-5xl m-auto px-6 pt-8">
         <div className="flex flex-col items-end justify-between md:flex-row gap-6">
           <div className="w-full md:w-1/2">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Top Contributors</h3>
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Top Contributors</h3>
+              <LeaderboardFilter value={view} onChange={setView} />
+            </div>
             <p className="mb-2">
               Here’s a spotlight on the most active contributors to the{" "}
               <strong className="text-indigo-600">Mozilla Campus Club of SLIIT</strong>.

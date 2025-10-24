@@ -5,11 +5,18 @@ export interface FileData {
   deletions: number
 }
 
+export type CommitDetail = {
+  message: string
+  date: string // ISO string from GitHub commit
+}
+
 export interface User {
   name: string
   commits: string[]
   commitCount: number
+  commitDetails: CommitDetail[]
   changeScore: number
   overallScore: number
-  [key: string]: string | number | string[]
+  [key: string]: string | number | string[] | CommitDetail[]
 }
+
