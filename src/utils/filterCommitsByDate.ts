@@ -2,7 +2,7 @@ import { User } from "@/types/user"
 
 export const filterCommitsByDate = (
   users: User[],
-  type: "daily" | "weekly" | "monthly" | "yearly"
+  type: "daily" | "weekly" | "monthly" | "yearly",
 ) => {
   const now = new Date()
   let from: Date
@@ -24,23 +24,24 @@ export const filterCommitsByDate = (
       return users
   }
 
-  return users.map(user => {
-    // Filter commitDetails by date
-    const filteredCommitDetails = user.commitDetails.filter(c => new Date(c.date) >= from)
+  return users
+    .map((user) => {
+      // Filter commitDetails by date
+      const filteredCommitDetails = user.commitDetails.filter((c) => new Date(c.date) >= from)
 
-    // Recalculate commitCount
-    const commitCount = filteredCommitDetails.length
+      // Recalculate commitCount
+      const commitCount = filteredCommitDetails.length
 
-    const changeScore = user.changeScore 
-    const overallScore = user.overallScore 
+      const changeScore = user.changeScore
+      const overallScore = user.overallScore
 
-    return {
-      ...user,
-      commitDetails: filteredCommitDetails,
-      commitCount,
-      changeScore,
-      overallScore
-    }
-  })
-  .filter(user => user.commitCount > 0)
+      return {
+        ...user,
+        commitDetails: filteredCommitDetails,
+        commitCount,
+        changeScore,
+        overallScore,
+      }
+    })
+    .filter((user) => user.commitCount > 0)
 }

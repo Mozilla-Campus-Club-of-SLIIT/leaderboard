@@ -1,11 +1,13 @@
-import { redis } from "@/lib/upstash" 
+import { redis } from "@/lib/upstash"
 import { updateLeaderboard } from "../update/route"
 import { User } from "@/types/user"
 import { filterCommitsByDate } from "@/utils/filterCommitsByDate"
+import { NextRequest } from "next/server"
 
-export async function GET(request: Request, { params }: { params: { range: string } }) {
-  const validRanges = ["daily", "weekly", "monthly", "yearly", "all"];
-  const range = validRanges.includes(params.range) ? params.range : "all";
+export async function GET(request: NextRequest, ctx: RouteContext<"/api/leaderboard/[range]">) {
+  const params = await ctx.params
+  const validRanges = ["daily", "weekly", "monthly", "yearly", "all"]
+  const range = validRanges.includes(params.range) ? params.range : "all"
 
   let leaders = (await redis.get("leaders")) as User[] | null
   if (!leaders) await updateLeaderboard()
@@ -25,6 +27,6 @@ export async function GET(request: Request, { params }: { params: { range: strin
       commitDetails: user.commitDetails,
       changeScore: user.changeScore,
       overallScore: user.overallScore,
-    }))
+    })),
   )
 }

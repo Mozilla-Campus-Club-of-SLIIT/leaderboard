@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC } from "react"
 import Props from "@/types/filter"
 
 const LeaderboardFilter: FC<Props> = ({ value, onChange }) => {
@@ -14,7 +14,7 @@ const LeaderboardFilter: FC<Props> = ({ value, onChange }) => {
       <option value="monthly">This Month</option>
       <option value="yearly">This Year</option>
     </select>
-  );
-};
+  )
+}
 
-export default LeaderboardFilter;
+export default LeaderboardFilter

@@ -1,7 +1,7 @@
 "use client"
 
 import Table from "@/components/Table"
-import LeaderboardFilter from "@/components/LeaderboardFilter";
+import LeaderboardFilter from "@/components/LeaderboardFilter"
 import useFetch from "@/hooks/useFetch"
 import RateLimit from "@/types/ratelimit"
 import { User } from "@/types/user"
@@ -16,13 +16,13 @@ import Image from "next/image"
 export default function Home() {
   const [refreshRatelimit, setRefreshRatelimit] = useState(false)
   const [refreshLastUpdated, setRefreshLastUpdated] = useState(false)
-  const [view, setView] = useState("all");
-  const [refreshLeaderboard, setRefreshLeaderboard] = useState(false);
+  const [view, setView] = useState("all")
+  const [refreshLeaderboard, setRefreshLeaderboard] = useState(false)
 
   const [leaderboard, , isLeaderboardLoading] = useFetch<User[]>(
     `/api/leaderboard/${view}`,
     [] as User[],
-    refreshLeaderboard
+    refreshLeaderboard,
   )
   const [ratelimit] = useFetch<RateLimit>("/api/leaderboard/ratelimit", {}, refreshRatelimit)
   const [lastUpdated, , isLastUpdatedLoading] = useFetch<number>(
@@ -79,7 +79,9 @@ export default function Home() {
               and climb the leaderboard.
             </p>
             {/* Desktop/tablet only */}
-            <h4 className="text-lg font-semibold text-gray-800 mb-2 md:block hidden">How Points Are Calculated</h4>
+            <h4 className="text-lg font-semibold text-gray-800 mb-2 md:block hidden">
+              How Points Are Calculated
+            </h4>
             <pre className="bg-white border border-gray-300 rounded p-4 mb-2 text-sm font-mono text-gray-800 overflow-x-auto md:block hidden">
               <code>
                 <span className="text-purple-600">score</span> = commitCount *{" "}
@@ -115,8 +117,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      
 
       <section id="leaderboard" className="m-auto max-w-5xl px-6 py-4">
         <Table<User>
@@ -230,7 +230,8 @@ export default function Home() {
         </div>
       </section>
       <section className="w-full text-center py-6 text-sm text-gray-500">
-          © {new Date().getFullYear()} Mozilla Campus Club of SLIIT. Made with <span className="text-red-500">❤️</span> by SLIIT Mozillians
+        © {new Date().getFullYear()} Mozilla Campus Club of SLIIT. Made with{" "}
+        <span className="text-red-500">❤️</span> by SLIIT Mozillians
       </section>
     </main>
   )
