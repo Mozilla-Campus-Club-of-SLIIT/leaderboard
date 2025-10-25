@@ -3,7 +3,7 @@ run-name: Post daily discord leaderboard
 on:
   workflow_dispatch:
   schedule:
-    - cron: 0 0 * * *
+    - cron: 55 23 * * *
 
 jobs:
   post:
