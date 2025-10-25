@@ -82,14 +82,14 @@ export default function Table<T>({
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
-      <table className="min-w-full text-sm text-left text-gray-700">
-        <thead className="bg-gray-100 text-gray-600 uppercase tracking-wider">
+    <div className="overflow-x-auto rounded-lg border bg-card shadow-sm border-theme">
+      <table className="min-w-full text-sm text-left" style={{ color: 'var(--fg)' }}>
+        <thead className="uppercase tracking-wider" style={{ background: 'transparent' }}>
           <tr>
             {headers.map((header, index) => (
               <th key={index} className="px-4 py-3">
                 <div className="flex gap-3 items-center">
-                  <div>{header}</div>
+                  <div className="text-muted">{header}</div>
                   {sortColumns?.includes(header) && (
                     <div
                       onClick={() => changeSorting(header)}
@@ -122,7 +122,7 @@ export default function Table<T>({
               <tr key={rowIndex} className="animate-pulse">
                 {Array.from({ length: headers.length }).map((_, cellIndex) => (
                   <td key={cellIndex} className="px-4 py-3">
-                    <div className="h-6 bg-gray-300 rounded w-full"></div>
+                    <div className="h-6 rounded w-full" style={{ background: 'var(--border)' }}></div>
                   </td>
                 ))}
               </tr>
@@ -135,7 +135,7 @@ export default function Table<T>({
             </tr>
           ) : (
             mappedRows.map((row: ReactNode[], rowIndex: number) => (
-              <tr key={rowIndex} className="nth-[even]:bg-gray-100 hover:bg-gray-200">
+              <tr key={rowIndex} style={{ background: rowIndex % 2 === 0 ? 'transparent' : 'var(--card)' }} className="hover:bg-opacity-5" onMouseEnter={() => {}}>
                 {row.map((cell, cellIndex) => (
                   <td key={cellIndex} className="px-4 py-3">
                     {cell as ReactNode}
