@@ -7,7 +7,7 @@ import RateLimit from "@/types/ratelimit"
 import { User } from "@/types/user"
 import { relativeTime } from "@/utils/relative-time"
 import { CHANGESCORE_MULTIPLIER, COMMIT_MULTIPLIER } from "@/utils/scoring"
-import { useEffect, useState } from "react"
+import { useEffect, useState,useMemo } from "react"
 import moxyLeaderboardImage from "@/assets/images/moxy-leaderboard.png"
 import avatarPlaceholder from "@/assets/images/placeholder.png"
 
@@ -24,6 +24,9 @@ export default function Home() {
     [] as User[],
     refreshLeaderboard,
   )
+  const sortedLeaderboard = [...leaderboard].sort(
+  (a, b) => b.overallScore - a.overallScore
+);
   const [ratelimit] = useFetch<RateLimit>("/api/leaderboard/ratelimit", {}, refreshRatelimit)
   const [lastUpdated, , isLastUpdatedLoading] = useFetch<number>(
     "/api/leaderboard/last-update",
@@ -50,6 +53,15 @@ export default function Home() {
     setTimeAgo(relativeTime(lastUpdated))
   }, [isLeaderboardLoading, lastUpdated])
 
+  const overallRankByKey = useMemo(() => {
+  const copy = [...leaderboard].sort((a, b) => b.overallScore - a.overallScore);
+  const map = new Map<string, number>();
+  copy.forEach((u, i) => {
+    const k = (u.htmlUrl as string) || u.name;
+    map.set(k, i + 1);
+  });
+  return map;
+}, [leaderboard]);
   return (
     <main className="bg-gray-50 text-gray-800 min-h-screen font-sans">
       <header className="bg-white sticky top-0 z-50 flex items-center gap-4 px-6 py-4 shadow-sm border-b border-gray-200">
@@ -125,9 +137,12 @@ export default function Home() {
           defaultSortingColumn="Overall score"
           defaultSortingMethod="descending"
           isLoading={isLeaderboardLoading}
-          renderFunction={(user: User, index: number) => [
-            index + 1,
-            user.htmlUrl ? (
+          renderFunction={(user: User, index: number) => {
+  const key = (user.htmlUrl as string) || user.name;
+  const rank = overallRankByKey.get(key) ?? index + 1; // fallback if not found
+  return [
+    rank, // <- stable rank based on overall score
+    user.htmlUrl ? (
               <a
                 key={`link-${index}`}
                 href={user.htmlUrl as string}
@@ -167,8 +182,8 @@ export default function Home() {
             <div className="text-center" key={`overall-${index}`}>
               {user.overallScore.toFixed(2)}
             </div>,
-          ]}
-          rows={leaderboard}
+          ]}}
+          rows={sortedLeaderboard}
           columnToKeyMap={{
             ["Commits"]: "commits",
             ["Change score"]: "changeScore",
