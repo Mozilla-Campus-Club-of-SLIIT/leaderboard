@@ -2,6 +2,7 @@
 
 import Table from "@/components/Table"
 import LeaderboardFilter from "@/components/LeaderboardFilter"
+import Header from "@/components/Header"
 import useFetch from "@/hooks/useFetch"
 import RateLimit from "@/types/ratelimit"
 import { User } from "@/types/user"
@@ -52,11 +53,7 @@ export default function Home() {
 
   return (
     <main className="bg-gray-50 text-gray-800 min-h-screen font-sans">
-      <header className="bg-white sticky top-0 z-50 flex items-center gap-4 px-6 py-4 shadow-sm border-b border-gray-200">
-        <img src="/logo.png" alt="SLIIT Mozilla Logo" className="w-16 h-auto" />
-        <h1 className="text-xl font-semibold text-gray-900">SLIIT Mozilla GitHub Leaderboard</h1>
-      </header>
-
+      <Header />
       <section id="information" className="max-w-5xl m-auto px-6 pt-8">
         <div className="flex flex-col items-end justify-between md:flex-row gap-6">
           <div className="w-full md:w-1/2">
