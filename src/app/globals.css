@@ -1,8 +1,57 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f3f4f6;
-  --foreground: #171717;
+  --background: theme(colors.gray.50);           /* #fcfcfd */
+  --foreground: theme(colors.gray.900);          /* #171717 */
+  --link-color: theme(colors.orange.500);        /* #f97316 */
+  --heading-color: theme(colors.gray.800);       /* #111827 */
+  --text-color: theme(colors.gray.700);          /* #374151 */
+  --code-bg: theme(colors.white);                /* #ffffff */
+  --code-border: theme(colors.gray.400);         /* #bdbdbd */
+  --code-text: theme(colors.gray.700);           /* #374151 */
+  --select-bg: theme(colors.white);
+  --select-border: theme(colors.gray.300);       /* #d1d5db */
+  --select-text: theme(colors.gray.900);         /* #111827 */
+  --table-bg: theme(colors.white);
+  --table-border: theme(colors.gray.200);        /* #e5e7eb */
+  --table-header-bg: theme(colors.gray.100);     /* #f3f4f6 */
+  --table-header-text: theme(colors.gray.500);   /* #6b7280 */
+  --table-text: theme(colors.gray.700);          /* #374151 */
+  --table-row-even: theme(colors.gray.100);      /* #f3f4f6 */
+  --table-hover: theme(colors.gray.300);         /* #c5c5c5 */
+  --table-link: theme(colors.gray.700);          /* #374151 */
+  --table-link-hover: theme(colors.indigo.600);  /* #4f46e5 */
+  --header-bg: theme(colors.white);
+  --header-border: theme(colors.gray.200);       /* #e5e7eb */
+  --header-text: theme(colors.gray.800);         /* #111827 */
+  --icon-color: theme(colors.gray.900);          /* #171717 */
+}
+
+[data-theme="dark"] {
+  --background: theme(colors.gray.950);          /* #0d1117 */
+  --foreground: theme(colors.gray.200);          /* #c9d1d9 */
+  --link-color: theme(colors.orange.500);        /* #f97316 */
+  --heading-color: theme(colors.white);
+  --text-color: theme(colors.gray.200);          /* #c9d1d9 */
+  --code-bg: theme(colors.gray.800);             /* #161b22 */
+  --code-border: theme(colors.gray.600);         /* #5c5c5c */
+  --code-text: theme(colors.gray.200);           /* #c9d1d9 */
+  --select-bg: theme(colors.gray.800);
+  --select-border: theme(colors.gray.600);
+  --select-text: theme(colors.gray.200);
+  --table-bg: theme(colors.gray.900);
+  --table-border: theme(colors.gray.700);        /* #30363d */
+  --table-header-bg: theme(colors.gray.800);     /* #161b22 */
+  --table-header-text: theme(colors.gray.400);   /* #8b949e */
+  --table-text: theme(colors.gray.200);
+  --table-row-even: theme(colors.gray.800);
+  --table-hover: theme(colors.gray.700);         /* #1c2128 */
+  --table-link: theme(colors.gray.200);
+  --table-link-hover: theme(colors.indigo.600);  /* #4f46e5 */
+  --header-bg: theme(colors.gray.950);           /* #010409 */
+  --header-border: theme(colors.gray.700);
+  --header-text: theme(colors.gray.200);
+  --icon-color: theme(colors.gray.200);
 }
 
 @theme inline {
@@ -14,4 +63,6 @@
 
 body {
   @apply bg-background text-foreground font-sans;
+  background-color: var(--background);
+  color: var(--foreground);
 }
