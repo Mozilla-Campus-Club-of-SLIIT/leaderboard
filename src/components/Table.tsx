@@ -82,9 +82,15 @@ export default function Table<T>({
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm">
-      <table className="min-w-full text-sm text-left text-gray-700">
-        <thead className="bg-gray-100 text-gray-600 uppercase tracking-wider">
+    <div className="overflow-x-auto rounded-lg shadow-sm" style={{
+      border: '1px solid var(--table-border)',
+      backgroundColor: 'var(--table-bg)'
+    }}>
+      <table className="min-w-full text-sm text-left" style={{ color: 'var(--table-text)' }}>
+        <thead className="uppercase tracking-wider" style={{
+          backgroundColor: 'var(--table-header-bg)',
+          color: 'var(--table-header-text)'
+        }}>
           <tr>
             {headers.map((header, index) => (
               <th key={index} className="px-4 py-3">
@@ -93,19 +99,22 @@ export default function Table<T>({
                   {sortColumns?.includes(header) && (
                     <div
                       onClick={() => changeSorting(header)}
-                      className="text-xs leading-none text-gray-300 cursor-pointer"
+                      className="text-xs leading-none cursor-pointer"
+                      style={{ 
+                        color: sortingColumn === header ? 'var(--table-header-text)' : '#6b7280'
+                      }}
                     >
                       <div
-                        className={
-                          sortingColumn === header && sortingAscending ? "text-gray-500" : ""
-                        }
+                        style={{
+                          color: sortingColumn === header && sortingAscending ? 'var(--table-header-text)' : ''
+                        }}
                       >
                         ▲
                       </div>
                       <div
-                        className={
-                          sortingColumn === header && !sortingAscending ? "text-gray-500" : ""
-                        }
+                        style={{
+                          color: sortingColumn === header && !sortingAscending ? 'var(--table-header-text)' : ''
+                        }}
                       >
                         ▼
                       </div>
@@ -122,27 +131,37 @@ export default function Table<T>({
               <tr key={rowIndex} className="animate-pulse">
                 {Array.from({ length: headers.length }).map((_, cellIndex) => (
                   <td key={cellIndex} className="px-4 py-3">
-                    <div className="h-6 bg-gray-300 rounded w-full"></div>
+                    <div className="h-6 rounded w-full" style={{ backgroundColor: 'var(--table-row-even)' }}></div>
                   </td>
                 ))}
               </tr>
             ))
           ) : rows.length === 0 ? (
-            <tr className="hover:bg-gray-200">
+            <tr style={{ backgroundColor: 'var(--table-hover)' }}>
               <td key="table-no-data" className="px-4 py-3" colSpan={headers.length}>
                 No data
               </td>
             </tr>
           ) : (
-            mappedRows.map((row: ReactNode[], rowIndex: number) => (
-              <tr key={rowIndex} className="nth-[even]:bg-gray-100 hover:bg-gray-200">
-                {row.map((cell, cellIndex) => (
-                  <td key={cellIndex} className="px-4 py-3">
-                    {cell as ReactNode}
-                  </td>
-                ))}
-              </tr>
-            ))
+            mappedRows.map((row: ReactNode[], rowIndex: number) => {
+              const isEven = rowIndex % 2 === 1
+              return (
+                <tr
+                  key={rowIndex}
+                  style={{
+                    backgroundColor: isEven ? 'var(--table-row-even)' : 'var(--table-bg)'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--table-hover)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = isEven ? 'var(--table-row-even)' : 'var(--table-bg)'}
+                >
+                  {row.map((cell, cellIndex) => (
+                    <td key={cellIndex} className="px-4 py-3">
+                      {cell as ReactNode}
+                    </td>
+                  ))}
+                </tr>
+              )
+            })
           )}
         </tbody>
       </table>
