@@ -13,8 +13,6 @@ import moxyLeaderboardImage from "@/assets/images/moxy-leaderboard.png"
 import avatarPlaceholder from "@/assets/images/placeholder.png"
 
 import Image from "next/image"
-import ThemeToggle from "@/components/ThemeToggle"
-import Logo from "@/components/Logo"
 
 export default function Home() {
   const [refreshRatelimit, setRefreshRatelimit] = useState(false)
@@ -83,11 +81,11 @@ export default function Home() {
             </h4>
             <pre className="bg-white border border-gray-300 rounded p-4 mb-2 text-sm font-mono text-gray-800 overflow-x-auto md:block hidden">
               <code>
-                <span style={{ color: 'var(--purple)' }} className="">score</span> = commitCount *{" "}
-                <span style={{ color: 'var(--green)' }}>{COMMIT_MULTIPLIER}</span> +{" "}
-                <span style={{ color: 'var(--pink)' }}>log10</span>
-                (changeScore + <span style={{ color: 'var(--green)' }}>1</span>) *{" "}
-                <span style={{ color: 'var(--green)' }}>{CHANGESCORE_MULTIPLIER}</span>
+                <span className="text-purple-600">score</span> = commitCount *{" "}
+                <span className="text-green-600">{COMMIT_MULTIPLIER}</span> +{" "}
+                <span className="text-pink-600">log10</span>
+                (changeScore + <span className="text-green-600">1</span>) *{" "}
+                <span className="text-green-600">{CHANGESCORE_MULTIPLIER}</span>
               </code>
             </pre>
             <div className="text-gray-700 mb-2 md:block hidden">
