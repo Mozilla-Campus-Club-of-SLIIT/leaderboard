@@ -1,0 +1,21 @@
+name: Discord daily leaderboard
+run-name: Post daily discord leaderboard
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 55 23 * * *
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: extra/discord-leaderboard-bot
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Post leaderboard
+        env:
+          DISCORD_WEBHOOK_DAILY: ${{ secrets.DISCORD_WEBHOOK_DAILY }}
+          LEADERBOARD_API_URL: https://leaderboard.sliitmozilla.org
+        run: node daily.js
