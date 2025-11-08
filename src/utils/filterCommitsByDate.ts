@@ -1,4 +1,5 @@
 import { User } from "@/types/user"
+import { calculateChangeScore, calculateOverallScore } from "@/utils/scoring"
 
 export const filterCommitsByDate = (
   users: User[],
@@ -32,8 +33,20 @@ export const filterCommitsByDate = (
       // Recalculate commitCount
       const commitCount = filteredCommitDetails.length
 
-      const changeScore = user.changeScore
-      const overallScore = user.overallScore
+      // Recalculate changeScore from filtered commits
+      let changeScore = 0
+
+      for (const commit of filteredCommitDetails) {
+        // Each commit now has files with additions/deletions
+        if (commit.files) {
+          for (const file of commit.files) {
+            changeScore += calculateChangeScore(file.additions, file.deletions)
+          }
+        }
+      }
+
+      // Recalculate overallScore
+      const overallScore = calculateOverallScore(commitCount, changeScore)
 
       return {
         ...user,
