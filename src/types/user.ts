@@ -8,6 +8,7 @@ export interface FileData {
 export type CommitDetail = {
   message: string
   date: string // ISO string from GitHub commit
+  files?: FileData[]
 }
 
 export interface User {
@@ -19,3 +20,4 @@ export interface User {
   overallScore: number
   [key: string]: string | number | string[] | CommitDetail[]
 }
+
