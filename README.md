@@ -35,6 +35,16 @@ docker run -d \
 
 - Make sure you have Docker installed
 
+Before starting the development server, install the project dependencies:
+
+```bash
+npm install
+# or
+yarn
+# or
+pnpm install
+```
+
 Then run the development server:
 
 ```bash

@@ -1,6 +1,8 @@
 "use client"
 
 import Table from "@/components/Table"
+import LeaderboardFilter from "@/components/LeaderboardFilter"
+import Header from "@/components/Header"
 import useFetch from "@/hooks/useFetch"
 import RateLimit from "@/types/ratelimit"
 import { User } from "@/types/user"
@@ -9,6 +11,8 @@ import { CHANGESCORE_MULTIPLIER, COMMIT_MULTIPLIER } from "@/utils/scoring"
 import { useEffect, useState } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import moxyLeaderboardImage from "@/assets/images/moxy-leaderboard.png"
+import avatarPlaceholder from "@/assets/images/placeholder.png"
+
 import Image from "next/image"
 
 export default function Home() {
@@ -19,11 +23,13 @@ export default function Home() {
   const [refreshRatelimit, setRefreshRatelimit] = useState(false)
   const [refreshLastUpdated, setRefreshLastUpdated] = useState(false)
   const [currentPage, setCurrentPage] = useState(pageParam)
+  const [view, setView] = useState("all")
+  const [refreshLeaderboard, setRefreshLeaderboard] = useState(false)
 
   const [leaderboard, , isLeaderboardLoading] = useFetch<User[]>(
-    "/api/leaderboard",
+    `/api/leaderboard/${view}`,
     [] as User[],
-    false,
+    refreshLeaderboard,
   )
   const [ratelimit] = useFetch<RateLimit>("/api/leaderboard/ratelimit", {}, refreshRatelimit)
   const [lastUpdated, , isLastUpdatedLoading] = useFetch<number>(
@@ -37,6 +43,10 @@ export default function Home() {
     setCurrentPage(page)
     router.push(`?page=${page}`)
   }
+
+  useEffect(() => {
+    setRefreshLeaderboard((prev) => !prev)
+  }, [view])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -58,15 +68,14 @@ export default function Home() {
 
   return (
     <main className="bg-gray-50 text-gray-800 min-h-screen font-sans">
-      <header className="bg-white sticky top-0 z-50 flex items-center gap-4 px-6 py-4 shadow-sm border-b border-gray-200">
-        <img src="/logo.png" alt="SLIIT Mozilla Logo" className="w-16 h-auto" />
-        <h1 className="text-xl font-semibold text-gray-900">SLIIT Mozilla GitHub Leaderboard</h1>
-      </header>
-
+      <Header />
       <section id="information" className="max-w-5xl m-auto px-6 pt-8">
         <div className="flex flex-col items-end justify-between md:flex-row gap-6">
           <div className="w-full md:w-1/2">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Top Contributors</h3>
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Top Contributors</h3>
+              <LeaderboardFilter value={view} onChange={setView} />
+            </div>
             <p className="mb-2">
               Here’s a spotlight on the most active contributors to the{" "}
               <strong className="text-indigo-600">Mozilla Campus Club of SLIIT</strong>.
@@ -82,7 +91,9 @@ export default function Home() {
               and climb the leaderboard.
             </p>
             {/* Desktop/tablet only */}
-            <h4 className="text-lg font-semibold text-gray-800 mb-2 md:block hidden">How Points Are Calculated</h4>
+            <h4 className="text-lg font-semibold text-gray-800 mb-2 md:block hidden">
+              How Points Are Calculated
+            </h4>
             <pre className="bg-white border border-gray-300 rounded p-4 mb-2 text-sm font-mono text-gray-800 overflow-x-auto md:block hidden">
               <code>
                 <span className="text-purple-600">score</span> = commitCount *{" "}
@@ -119,8 +130,6 @@ export default function Home() {
         </div>
       </section>
 
-      
-
       <section id="leaderboard" className="m-auto max-w-5xl px-6 py-4">
         <Table<User>
           headers={["Rank", "Contributor", "Commits", "Change score", "Overall score"]}
@@ -130,27 +139,44 @@ export default function Home() {
           isLoading={isLeaderboardLoading}
           renderFunction={(user: User, index: number) => [
             index + 1,
-            <a
-              key={`link-${index}`}
-              href={user.htmlUrl as string}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex gap-4 items-center pointer text-indigo-600 hover:underline font-medium"
-            >
-              <img
-                src={(user.avatarUrl || null) as string}
-                className="w-10 h-auto rounded-full"
-                alt={user.name}
-              />
-              <div>{user.name}</div>
-            </a>,
-            <div className="text-right" key={`commits-${index}`}>
+            user.htmlUrl ? (
+              <a
+                key={`link-${index}`}
+                href={user.htmlUrl as string}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex gap-4 items-center pointer text-indigo-600 hover:underline font-medium group relative"
+              >
+                <img
+                  src={(user.avatarUrl || avatarPlaceholder.src) as string}
+                  onError={(e) => {
+                    e.currentTarget.src = avatarPlaceholder.src
+                  }}
+                  className="w-10 h-auto rounded-full"
+                  alt={user.name}
+                />
+                <div>{user.name}</div>
+              </a>
+            ) : (
+              <div key={`link-${index}`} className="flex gap-4 items-center group relative">
+                <div className="pointer-events-none absolute duration-200 transition-opacity opacity-0 group-hover:opacity-100 bottom-full -left-10 mb-2 block bg-gray-800 text-white text-sm rounded px-2 py-1">
+                  Deactivated Account
+                </div>
+                <img
+                  src={avatarPlaceholder.src}
+                  className="w-10 h-auto rounded-full"
+                  alt={user.name}
+                />
+                <div>{user.name}</div>
+              </div>
+            ),
+            <div className="text-center" key={`commits-${index}`}>
               {user.commits}
             </div>,
-            <div className="text-right" key={`change-${index}`}>
+            <div className="text-center" key={`change-${index}`}>
               {user.changeScore.toFixed(2)}
             </div>,
-            <div className="text-right" key={`overall-${index}`}>
+            <div className="text-center" key={`overall-${index}`}>
               {user.overallScore.toFixed(2)}
             </div>,
           ]}
@@ -219,7 +245,8 @@ export default function Home() {
         </div>
       </section>
       <section className="w-full text-center py-6 text-sm text-gray-500">
-          © {new Date().getFullYear()} Mozilla Campus Club of SLIIT. Made with <span className="text-red-500">❤️</span> by SLIIT Mozillians
+        © {new Date().getFullYear()} Mozilla Campus Club of SLIIT. Made with{" "}
+        <span className="text-red-500">❤️</span> by SLIIT Mozillians
       </section>
     </main>
   )

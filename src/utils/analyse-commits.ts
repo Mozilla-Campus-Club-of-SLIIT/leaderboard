@@ -9,6 +9,7 @@ function createUser(author: { name: string; avatar_url: string; html_url: string
     avatarUrl: author.avatar_url,
     htmlUrl: author.html_url,
     commits: [],
+    commitDetails: [],
     commitCount: 0,
     changeScore: 0,
     overallScore: 0,
@@ -44,6 +45,7 @@ export const analyseCommits = (
     }
 
     const commitMsg = commit.commit.message.split("\n")[0]
+    const commitDate = commit.commit.author?.date || commit.commit.committer?.date || ""
     const commitFiles = commit.files as FileData[]
 
     let changeScore = 0
@@ -54,6 +56,18 @@ export const analyseCommits = (
     }
 
     user.commits.push(commitMsg)
+    user.commitDetails.push({
+      message: commitMsg,
+      date: commitDate,
+      files: commitFiles
+        .filter((f) => !ignoreFilesPattern.test(f.filename))
+        .map((f) => ({
+          filename: f.filename,
+          additions: f.additions,
+          deletions: f.deletions,
+          changes: f.changes,
+        })),
+    })
     user.commitCount += 1
     user.changeScore += changeScore
     // applying log10 will help the leaderboard to not break when there are 1000+ additions

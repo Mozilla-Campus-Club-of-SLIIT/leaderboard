@@ -1,0 +1,21 @@
+name: Discord monthly leaderboard
+run-name: Post monthly discord leaderboard
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 28 * *
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: extra/discord-leaderboard-bot
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Post leaderboard
+        env:
+          DISCORD_WEBHOOK_MONTHLY: ${{ secrets.DISCORD_WEBHOOK_MONTHLY }}
+          LEADERBOARD_API_URL: https://leaderboard.sliitmozilla.org
+        run: node monthly.js
