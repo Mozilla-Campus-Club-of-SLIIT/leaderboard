@@ -38,15 +38,16 @@ export default function Table<T>({
   const [sortingAscending, setSortingAscending] = useState(defaultSortingMethod === "ascending")
   const [mappedRows, setMappedRows] = useState<ReactNode[][]>([])
   const [sortedRows, setSortedRows] = useState<T[]>([])
-  
+
   const totalPages = itemsPerPage ? Math.ceil(rows.length / itemsPerPage) : 1
   const btnBase = "px-2 sm:px-3 py-1 text-sm rounded border shrink-0"
   const btnNav = `${btnBase} border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed`
-  const paginatedRows = useMemo(() => 
-    itemsPerPage 
-      ? sortedRows.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-      : sortedRows,
-    [sortedRows, currentPage, itemsPerPage]
+  const paginatedRows = useMemo(
+    () =>
+      itemsPerPage
+        ? sortedRows.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+        : sortedRows,
+    [sortedRows, currentPage, itemsPerPage],
   )
 
   useEffect(() => {
@@ -92,9 +93,11 @@ export default function Table<T>({
 
   useEffect(() => {
     if (renderFunction) {
-      setMappedRows(paginatedRows.map((row, idx) => 
-        renderFunction(row, (currentPage - 1) * (itemsPerPage || 0) + idx)
-      ))
+      setMappedRows(
+        paginatedRows.map((row, idx) =>
+          renderFunction(row, (currentPage - 1) * (itemsPerPage || 0) + idx),
+        ),
+      )
     }
   }, [renderFunction, paginatedRows, currentPage, itemsPerPage])
 
@@ -120,77 +123,77 @@ export default function Table<T>({
     <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm text-left text-gray-700">
-        <thead className="bg-gray-100 text-gray-600 uppercase tracking-wider">
-          <tr>
-            {headers.map((header, index) => (
-              <th key={index} className="px-4 py-3">
-                <div className="flex gap-3 items-center">
-                  <div>{header}</div>
-                  {sortColumns?.includes(header) && (
-                    <div
-                      onClick={() => changeSorting(header)}
-                      className="text-xs leading-none text-gray-300 cursor-pointer"
-                    >
+          <thead className="bg-gray-100 text-gray-600 uppercase tracking-wider">
+            <tr>
+              {headers.map((header, index) => (
+                <th key={index} className="px-4 py-3">
+                  <div className="flex gap-3 items-center">
+                    <div>{header}</div>
+                    {sortColumns?.includes(header) && (
                       <div
-                        className={
-                          sortingColumn === header && sortingAscending ? "text-gray-500" : ""
-                        }
+                        onClick={() => changeSorting(header)}
+                        className="text-xs leading-none text-gray-300 cursor-pointer"
                       >
-                        ▲
+                        <div
+                          className={
+                            sortingColumn === header && sortingAscending ? "text-gray-500" : ""
+                          }
+                        >
+                          ▲
+                        </div>
+                        <div
+                          className={
+                            sortingColumn === header && !sortingAscending ? "text-gray-500" : ""
+                          }
+                        >
+                          ▼
+                        </div>
                       </div>
-                      <div
-                        className={
-                          sortingColumn === header && !sortingAscending ? "text-gray-500" : ""
-                        }
-                      >
-                        ▼
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {isLoading ? (
-            Array.from({ length: 5 }).map((_, rowIndex) => (
-              <tr key={rowIndex} className="animate-pulse">
-                {Array.from({ length: headers.length }).map((_, cellIndex) => (
-                  <td key={cellIndex} className="px-4 py-3">
-                    <div className="h-6 bg-gray-300 rounded w-full"></div>
-                  </td>
-                ))}
-              </tr>
-            ))
-          ) : rows.length === 0 ? (
-            <tr className="hover:bg-gray-200">
-              <td key="table-no-data" className="px-4 py-3" colSpan={headers.length}>
-                No data
-              </td>
+                    )}
+                  </div>
+                </th>
+              ))}
             </tr>
-          ) : (
-            mappedRows.map((row: ReactNode[], rowIndex: number) => (
-              <tr key={rowIndex} className="nth-[even]:bg-gray-100 hover:bg-gray-200">
-                {row.map((cell, cellIndex) => (
-                  <td key={cellIndex} className="px-4 py-3">
-                    {cell as ReactNode}
-                  </td>
-                ))}
+          </thead>
+          <tbody>
+            {isLoading ? (
+              Array.from({ length: 5 }).map((_, rowIndex) => (
+                <tr key={rowIndex} className="animate-pulse">
+                  {Array.from({ length: headers.length }).map((_, cellIndex) => (
+                    <td key={cellIndex} className="px-4 py-3">
+                      <div className="h-6 bg-gray-300 rounded w-full"></div>
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : rows.length === 0 ? (
+              <tr className="hover:bg-gray-200">
+                <td key="table-no-data" className="px-4 py-3" colSpan={headers.length}>
+                  No data
+                </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              mappedRows.map((row: ReactNode[], rowIndex: number) => (
+                <tr key={rowIndex} className="nth-[even]:bg-gray-100 hover:bg-gray-200">
+                  {row.map((cell, cellIndex) => (
+                    <td key={cellIndex} className="px-4 py-3">
+                      {cell as ReactNode}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
-      
+
       {itemsPerPage && totalPages > 1 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-gray-200">
           <div className="text-sm text-gray-700 text-center sm:text-left">
             Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
             {Math.min(currentPage * itemsPerPage, rows.length)} of {rows.length} entries
           </div>
-          
+
           <div className="flex flex-wrap gap-1 justify-center max-w-full">
             <button
               onClick={() => onPageChange?.(currentPage - 1)}
@@ -199,27 +202,31 @@ export default function Table<T>({
             >
               Previous
             </button>
-            
-            {generatePageNumbers(currentPage, totalPages, siblingCount, boundaryCount, 5).map((item, idx) => 
-              item === 'ellipsis' ? (
-                <span key={`ellipsis-${idx}`} className="px-1 sm:px-2 py-1 text-sm text-gray-500 shrink-0">
-                  ...
-                </span>
-              ) : (
-                <button
-                  key={item}
-                  onClick={() => onPageChange?.(item)}
-                  className={`${btnBase} ${
-                    item === currentPage
-                      ? "bg-indigo-600 text-white border-indigo-600"
-                      : "border-gray-300 bg-white hover:bg-gray-50"
-                  }`}
-                >
-                  {item}
-                </button>
-              )
+
+            {generatePageNumbers(currentPage, totalPages, siblingCount, boundaryCount, 5).map(
+              (item, idx) =>
+                item === "ellipsis" ? (
+                  <span
+                    key={`ellipsis-${idx}`}
+                    className="px-1 sm:px-2 py-1 text-sm text-gray-500 shrink-0"
+                  >
+                    ...
+                  </span>
+                ) : (
+                  <button
+                    key={item}
+                    onClick={() => onPageChange?.(item)}
+                    className={`${btnBase} ${
+                      item === currentPage
+                        ? "bg-indigo-600 text-white border-indigo-600"
+                        : "border-gray-300 bg-white hover:bg-gray-50"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ),
             )}
-            
+
             <button
               onClick={() => onPageChange?.(currentPage + 1)}
               disabled={currentPage === totalPages}

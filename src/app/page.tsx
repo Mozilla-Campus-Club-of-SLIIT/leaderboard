@@ -18,8 +18,8 @@ import Image from "next/image"
 export default function Home() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const pageParam = Number(searchParams.get('page')) || 1
-  
+  const pageParam = Number(searchParams.get("page")) || 1
+
   const [refreshRatelimit, setRefreshRatelimit] = useState(false)
   const [refreshLastUpdated, setRefreshLastUpdated] = useState(false)
   const [currentPage, setCurrentPage] = useState(pageParam)
@@ -204,7 +204,11 @@ export default function Home() {
         </div>
         <div>
           Last updated{" "}
-          <abbr title={new Date(lastUpdated).toLocaleString()} className="italic" suppressHydrationWarning>
+          <abbr
+            title={new Date(lastUpdated).toLocaleString()}
+            className="italic"
+            suppressHydrationWarning
+          >
             {timeAgo}
           </abbr>
         </div>
