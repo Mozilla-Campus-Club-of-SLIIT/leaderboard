@@ -18,7 +18,6 @@ export function generatePageNumbers(
   boundaryCount: number,
   truncationThreshold: number = 5,
 ): PageItem[] {
- 
   if (total < truncationThreshold) {
     return Array.from({ length: total }, (_, i) => i + 1)
   }

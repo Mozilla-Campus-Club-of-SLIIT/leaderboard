@@ -46,6 +46,7 @@ export default function Home() {
 
   useEffect(() => {
     setRefreshLeaderboard((prev) => !prev)
+    setCurrentPage(1)
   }, [view])
 
   useEffect(() => {
