@@ -20,4 +20,3 @@ export interface User {
   overallScore: number
   [key: string]: string | number | string[] | CommitDetail[]
 }
-
