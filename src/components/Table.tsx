@@ -99,21 +99,20 @@ export default function Table<T>({
                   {sortColumns?.includes(header) && (
                     <div
                       onClick={() => changeSorting(header)}
-                      className="text-xs leading-none cursor-pointer"
-                      style={{ 
-                        color: sortingColumn === header ? 'var(--table-header-text)' : '#6b7280'
-                      }}
+                      className="text-xs leading-none cursor-pointer flex flex-col"
                     >
                       <div
                         style={{
-                          color: sortingColumn === header && sortingAscending ? 'var(--table-header-text)' : ''
+                          color: sortingColumn === header && sortingAscending ? 'var(--sort-active)' : 'var(--sort-inactive)',
+                          opacity: sortingColumn === header && sortingAscending ? 1 : 0.5
                         }}
                       >
                         ▲
                       </div>
                       <div
                         style={{
-                          color: sortingColumn === header && !sortingAscending ? 'var(--table-header-text)' : ''
+                          color: sortingColumn === header && !sortingAscending ? 'var(--sort-active)' : 'var(--sort-inactive)',
+                          opacity: sortingColumn === header && !sortingAscending ? 1 : 0.5
                         }}
                       >
                         ▼

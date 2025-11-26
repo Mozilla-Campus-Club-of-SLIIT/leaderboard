@@ -141,10 +141,8 @@ export default function Home() {
                 href={user.htmlUrl as string}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex gap-4 items-center pointer hover:underline font-medium group relative"
-                style={{ color: "var(--table-link)" }}
-                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--table-link-hover)'}
-                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--table-link)'}
+                className="flex gap-4 items-center pointer font-medium group relative hover:underline"
+                style={{ color: "var(--table-link-hover)" }}
               >
                 <img
                   src={(user.avatarUrl || avatarPlaceholder.src) as string}
