@@ -1,3 +1,5 @@
+"use client"
+
 import { User } from "@/types/user"
 import { useEffect, useRef, useState } from "react"
 import {
@@ -23,9 +25,15 @@ export interface ProfileProps {
 }
 
 export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
+  const isMobileDevice =
+    typeof window !== "undefined" &&
+    (/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent) ||
+      window.innerWidth < 768)
+
   const [profileDetails, setProfileDetails] = useState<User | null>(null)
   const [resetVisibleArea, setResetVisibleArea] = useState(false)
   const visibleAreaRef = useRef<HTMLDivElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
   const [height, setHeight] = useState(0)
 
   useEffect(() => {
@@ -39,19 +47,31 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
   }, [profile])
 
   useEffect(() => {
+    if (!isMobileDevice) return
     if (visibleAreaRef.current) {
       const initialHeight = visibleAreaRef.current.getBoundingClientRect().height + 10
       setHeight(initialHeight)
     }
   }, [visibleAreaRef.current?.getBoundingClientRect().height, resetVisibleArea])
 
-    useEffect(() => {
+  useEffect(() => {
+    if (!isMobileDevice) return
     if (height < 50) {
       setIsOpen(false)
-      setHeight((visibleAreaRef.current?.getBoundingClientRect().height|| 0) + 10)
+      setHeight((visibleAreaRef.current?.getBoundingClientRect().height || 0) + 10)
     }
   }, [height])
 
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      console.log(panelRef)
+      if (panelRef && panelRef.current && !panelRef.current.contains(e.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handler)
+    return () => document.removeEventListener("mousedown", handler)
+  }, [])
 
   const featureCount: number = (profileDetails?.featureCount || 0) as number
   const bugCount: number = (profileDetails?.bugCount || 0) as number
@@ -91,13 +111,14 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
     isOpen &&
     profileDetails && (
       <aside
+        ref={panelRef}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
-        style={{ height }}
-        className={`${height >= window.innerHeight ? "" : "touch-none"} max-h-full pointer-events-auto z-100 bg-gray-50 grid justify-center-center fixed p-5 bottom-0 w-full shadow-[0_-4px_6px_rgba(0,0,0,0.1)] border-t-2 border-gray-200 overflow-y-scroll`}
+        style={{ height: isMobileDevice ? height : undefined }}
+        className={`${height >= window.innerHeight ? "" : "touch-none"} max-h-full z-100 bg-gray-50 grid justify-center-center fixed p-5 bottom-0 sm:top-0 sm:right-0 w-full sm:w-1/4 sm:min-w-100 sm:h-full shadow-[0_-4px_6px_rgba(0,0,0,0.1)] border-t-2 sm:border-l-2 border-gray-200 overflow-y-scroll`}
       >
         <div ref={visibleAreaRef}>
-          <div className="h-2 rounded-full w-1/3 mx-auto my-3 bg-gray-200" />
+          <div className="h-2 rounded-full w-1/3 mx-auto my-3 bg-gray-200 sm:hidden" />
           <div className="flex items-center gap-5 w-full">
             <img
               src={(profileDetails.avatarUrl || avatarPlaceholder.src) as string}
@@ -140,43 +161,41 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
         </div>
         <div className="my-2">
           <h5 className="font-bold text-xl text-gray-700 my-2">Contribution breakdown</h5>
-          <div className="grid gap-4 grid-cols-4 [&>div]:p-3 [&>div]:rounded-md [&>div]:opacity-80 [&>div]:shadow-sm [&>div]:aspect-square [&>div]:grid [&>div]:text-center [&>div]:items-center [&>div]:font-bold">
-            <div className="bg-purple-600 text-white text-center">
-              <Rocket size={40} className="mx-auto" />
-              <div className="text-sm font-light my-1">Features</div>
-              <div className="text-xl text-center">{featureCount}</div>
+          <div className="grid gap-4 grid-cols-4 [&>div]:p-3 [&>div]:rounded-md [&>div]:opacity-80 [&>div]:shadow-sm [&>div]:aspect-square [&>div]:grid [&>div]:text-center [&>div]:items-center [&>div]:font-bold [&>div]:border [&>div]:border-violet-700">
+            <div>
+              <Rocket size={28} className="mx-auto" color="#f54900" />
+              <div className="text-sm font-light">Features</div>
+              <div className="text-2xl text-center text-violet-700">{featureCount}</div>
             </div>
-            <div className="bg-green-500 text-white">
-              <Bug size={40} className="mx-auto" />
-              <div className="text-sm font-light my-1">Patches</div>
-              <div className="text-xl text-center">{bugCount}</div>
+            <div>
+              <Bug size={28} className="mx-auto" color="#f54900" />
+              <div className="text-sm font-light">Patches</div>
+              <div className="text-2xl text-center text-violet-700">{bugCount}</div>
             </div>
-            <div className="bg-orange-500 text-white">
-              <Workflow size={40} className="mx-auto" />
-              <div className="text-sm font-light my-1">CI</div>
-              <div className="text-xl text-center">{ciCount}</div>
+            <div>
+              <Workflow size={28} className="mx-auto" color="#f54900" />
+              <div className="text-sm font-light">CI</div>
+              <div className="text-2xl text-center text-violet-700">{ciCount}</div>
             </div>
-            <div className="bg-sky-500 text-white">
-              <Book size={40} className="mx-auto" />
-              <div className="text-sm font-light my-1">Docs</div>
-              <div className="text-xl text-center">{docsCount}</div>
+            <div>
+              <Book size={28} className="mx-auto" color="#f54900" />
+              <div className="text-sm font-light">Docs</div>
+              <div className="text-2xl text-center text-violet-700">{docsCount}</div>
             </div>
-            <div className="bg-yellow-500 text-white">
-              <TestTube size={40} className="mx-auto" />
-              <div className="text-sm font-light my-1">Tests</div>
-              <div className="text-xl text-center">{testCount}</div>
+            <div>
+              <TestTube size={28} className="mx-auto" color="#f54900" />
+              <div className="text-sm font-light">Tests</div>
+              <div className="text-2xl text-center text-violet-700">{testCount}</div>
             </div>
-
-            <div className="bg-teal-500 text-white">
-              <Sliders size={40} className="mx-auto" />
-              <div className="text-sm font-light my-1">Perf</div>
-              <div className="text-xl text-center">{perfCount}</div>
+            <div>
+              <Sliders size={28} className="mx-auto" color="#f54900" />
+              <div className="text-sm font-light">Perf</div>
+              <div className="text-2xl text-center text-violet-700">{perfCount}</div>
             </div>
-
-            <div className="bg-gray-500 text-white">
-              <Dices size={40} className="mx-auto" />
-              <div className="text-sm font-light my-1">Other</div>
-              <div className="text-xl text-center">{otherCount}</div>
+            <div>
+              <Dices size={28} className="mx-auto" color="#f54900" />
+              <div className="text-sm font-light">Other</div>
+              <div className="text-2xl text-center text-violet-700">{otherCount}</div>
             </div>
           </div>
         </div>
