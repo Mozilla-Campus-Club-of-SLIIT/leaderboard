@@ -14,4 +14,7 @@ export const commitCategories: CommitCategory[] = [
     listField: "features",
   },
   { name: "ci", pattern: /^ci(\(.*\))?:/i, countField: "ciCount", listField: "cis" },
+  { name: "docs", pattern: /^docs(\(.*\))?:/i, countField: "docsCount", listField: "docs" },
+  { name: "test", pattern: /^test(\(.*\))?:/i, countField: "testCount", listField: "test" },
+  { name: "perf", pattern: /^perf(\(.*\))?:/i, countField: "perfCount", listField: "perf" },
 ]

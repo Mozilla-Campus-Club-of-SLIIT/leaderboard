@@ -14,6 +14,7 @@ import moxyLeaderboardImage from "@/assets/images/moxy-leaderboard.png"
 import avatarPlaceholder from "@/assets/images/placeholder.png"
 
 import Image from "next/image"
+import Profile from "@/components/Profile"
 
 export default function Home() {
   const router = useRouter()
@@ -24,6 +25,8 @@ export default function Home() {
   const [refreshLastUpdated, setRefreshLastUpdated] = useState(false)
   const [currentPage, setCurrentPage] = useState(pageParam)
   const [view, setView] = useState("all")
+  const [isProfileContainerOpen, setIsProfileContainerOpen] = useState(false)
+  const [activeProfile, setActiveProfile] = useState<null | string>(null)
   const [refreshLeaderboard, setRefreshLeaderboard] = useState(false)
 
   const [leaderboard, , isLeaderboardLoading] = useFetch<User[]>(
@@ -67,8 +70,18 @@ export default function Home() {
     setCurrentPage(pageParam)
   }, [pageParam])
 
+  const openProfile = async (username: string) => {
+    setActiveProfile(username)
+    setIsProfileContainerOpen(true)
+  }
+
   return (
     <main className="bg-gray-50 text-gray-800 min-h-screen font-sans">
+      <Profile
+        isOpen={isProfileContainerOpen}
+        setIsOpen={setIsProfileContainerOpen}
+        profile={activeProfile}
+      />
       <Header />
       <section id="information" className="max-w-5xl m-auto px-6 pt-8">
         <div className="flex flex-col items-end justify-between md:flex-row gap-6">
@@ -141,12 +154,9 @@ export default function Home() {
           renderFunction={(user: User, index: number) => [
             index + 1,
             user.htmlUrl ? (
-              <a
-                key={`link-${index}`}
-                href={user.htmlUrl as string}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex gap-4 items-center pointer text-indigo-600 hover:underline font-medium group relative"
+              <button
+                onClick={() => openProfile(user.name)}
+                className="flex gap-4 items-center cursor-pointer text-indigo-600 hover:underline font-medium group relative"
               >
                 <img
                   src={(user.avatarUrl || avatarPlaceholder.src) as string}
@@ -157,7 +167,7 @@ export default function Home() {
                   alt={user.name}
                 />
                 <div>{user.name}</div>
-              </a>
+              </button>
             ) : (
               <div key={`link-${index}`} className="flex gap-4 items-center group relative">
                 <div className="pointer-events-none absolute duration-200 transition-opacity opacity-0 group-hover:opacity-100 bottom-full -left-10 mb-2 block bg-gray-800 text-white text-sm rounded px-2 py-1">
