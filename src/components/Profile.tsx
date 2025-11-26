@@ -34,10 +34,20 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
     })()
   }, [profile])
 
+  const featureCount: number = (profileDetails?.featureCount || 0) as number
+  const bugCount: number = (profileDetails?.bugCount || 0) as number
+  const ciCount: number = (profileDetails?.ciCount || 0) as number
+  const docsCount: number = (profileDetails?.docsCount || 0) as number
+  const testCount: number = (profileDetails?.testCount || 0) as number
+  const perfCount: number = (profileDetails?.perfCount || 0) as number
+  const otherCount =
+    (profileDetails?.commitCount || 0) -
+    (featureCount + bugCount + ciCount + docsCount + testCount + perfCount)
+
   return (
     isOpen &&
     profileDetails && (
-      <aside className="max-h-full hpointer-events-auto z-100 bg-gray-50 grid justify-center-center fixed p-5 bottom-0 w-full shadow-[0_-4px_6px_rgba(0,0,0,0.1)] border-t-2 border-gray-200 overflow-y-scroll">
+      <aside className="max-h-full pointer-events-auto z-100 bg-gray-50 grid justify-center-center fixed p-5 bottom-0 w-full shadow-[0_-4px_6px_rgba(0,0,0,0.1)] border-t-2 border-gray-200 overflow-y-scroll">
         <div className="flex items-center gap-5 w-full">
           <img
             src={(profileDetails.avatarUrl || avatarPlaceholder.src) as string}
@@ -81,39 +91,39 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
             <div className="bg-purple-600 text-white text-center">
               <Rocket size={40} className="mx-auto" />
               <div className="text-sm font-light my-1">Features</div>
-              <div className="text-xl text-center">{profileDetails.featureCount?.toString()}</div>
+              <div className="text-xl text-center">{featureCount}</div>
             </div>
             <div className="bg-green-500 text-white">
               <Bug size={40} className="mx-auto" />
               <div className="text-sm font-light my-1">Patches</div>
-              <div className="text-xl text-center">{profileDetails.bugCount?.toString()}</div>
+              <div className="text-xl text-center">{bugCount}</div>
             </div>
             <div className="bg-orange-500 text-white">
               <Workflow size={40} className="mx-auto" />
               <div className="text-sm font-light my-1">CI</div>
-              <div className="text-xl text-center">{profileDetails.ciCount?.toString()}</div>
+              <div className="text-xl text-center">{ciCount}</div>
             </div>
             <div className="bg-sky-500 text-white">
               <Book size={40} className="mx-auto" />
               <div className="text-sm font-light my-1">Docs</div>
-              <div className="text-xl text-center">{profileDetails.docsCount?.toString()}</div>
+              <div className="text-xl text-center">{docsCount}</div>
             </div>
             <div className="bg-yellow-500 text-white">
               <TestTube size={40} className="mx-auto" />
               <div className="text-sm font-light my-1">Tests</div>
-              <div className="text-xl text-center">{profileDetails.testCount?.toString()}</div>
+              <div className="text-xl text-center">{testCount}</div>
             </div>
 
             <div className="bg-teal-500 text-white">
               <Sliders size={40} className="mx-auto" />
               <div className="text-sm font-light my-1">Perf</div>
-              <div className="text-xl text-center">{profileDetails.perfCount?.toString()}</div>
+              <div className="text-xl text-center">{perfCount}</div>
             </div>
 
             <div className="bg-gray-500 text-white">
               <Dices size={40} className="mx-auto" />
               <div className="text-sm font-light my-1">Other</div>
-              <div className="text-xl text-center">{profileDetails.ciCount?.toString()}</div>
+              <div className="text-xl text-center">{otherCount}</div>
             </div>
           </div>
         </div>
