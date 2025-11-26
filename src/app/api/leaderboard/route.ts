@@ -14,7 +14,6 @@ export async function GET() {
     avatarUrl: user.avatarUrl,
     htmlUrl: user.htmlUrl,
     commits: user.commitCount,
-    commitDetails: user.commitDetails,
     changeScore: user.changeScore,
     overallScore: user.overallScore,
   }))
