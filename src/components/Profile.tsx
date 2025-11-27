@@ -60,7 +60,7 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
       setIsOpen(false)
       setHeight((visibleAreaRef.current?.getBoundingClientRect().height || 0) + 10)
     }
-  }, [height])
+  }, [height, setIsOpen, isMobileDevice])
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -70,7 +70,7 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
     }
     document.addEventListener("mousedown", handler)
     return () => document.removeEventListener("mousedown", handler)
-  }, [])
+  }, [setIsOpen])
 
   const featureCount: number = (profileDetails?.featureCount || 0) as number
   const bugCount: number = (profileDetails?.bugCount || 0) as number
@@ -133,7 +133,7 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
                 href={profileDetails.htmlUrl as string}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full flex my-2 items-center pointer text-indigo-600 hover:underline font-medium group"
+                className="w-full flex my-2 items-center cursor-pointer text-indigo-600 hover:underline font-medium group"
               >
                 <Github color="black" size={20} />
                 <span className="truncate absolute left-[25px] w-9/10">
@@ -207,12 +207,12 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
           </p>
           <div className="bg-white p-1 my-2 rounded-sm">
             <Timeline
-              timelineData={profileDetails.commitDetails.slice(0, 5).map((commit) => ({
+              timelineData={profileDetails.commitDetails?.slice(0, 5).map((commit) => ({
                 date: commit.date,
                 icon: GitCommitHorizontal,
                 description: commit.message,
                 iconBackgroundColor: "#08872B",
-              }))}
+              })) || []}
             />
           </div>
         </div>

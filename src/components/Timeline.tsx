@@ -22,9 +22,10 @@ const Timeline = ({ timelineData }: TimelineProps) => {
       {timelineData.map((item, index) => {
         const Icon = item.icon
         return (
-          <div key={item.date + index} className="flex items-start mb-3 relative">
+          <div key={`${item.date}-${item.description}-${index}`} className="flex items-start mb-3 relative">
             <div
-              className={`absolute left-1 mt-1 p-1 rounded-full ${item.iconBackgroundColor ? `bg-[${item.iconBackgroundColor}]` : "bg-gray-600"}`}
+              className="absolute left-1 mt-1 p-1 rounded-full"
+              style={{ backgroundColor: item.iconBackgroundColor || '#4b5563' }}
             >
               <Icon color="white" size={16} />
             </div>
