@@ -14,8 +14,7 @@ export async function GET(request: NextRequest, ctx: RouteContext<"/api/profile/
 
   const profile = leaders.find((user) => user.name === username)
   if (!profile) return Response.json({ body: "User not found" }, { status: 404 })
-  profile.commits = profile.commitDetails
-    .toSorted((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .map((commit) => commit.message)
+  profile.commitDetails.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  profile.commits = profile.commitDetails.map((commit) => commit.message)
   return Response.json(profile)
 }
