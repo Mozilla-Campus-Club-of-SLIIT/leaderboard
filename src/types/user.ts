@@ -18,5 +18,6 @@ export interface User {
   commitDetails: CommitDetail[]
   changeScore: number
   overallScore: number
+  htmlUrl: string
   [key: string]: string | number | string[] | CommitDetail[]
 }
