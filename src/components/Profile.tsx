@@ -26,9 +26,9 @@ export interface ProfileProps {
 
 export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
   const isMobileDevice =
-    typeof window !== "undefined" &&
+    typeof globalThis.window !== "undefined" &&
     (/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent) ||
-      window.innerWidth < 768)
+      globalThis.window.innerWidth < 768)
 
   const [profileDetails, setProfileDetails] = useState<User | null>(null)
   const [resetVisibleArea, setResetVisibleArea] = useState(false)
@@ -37,22 +37,24 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
   const [height, setHeight] = useState(0)
 
   useEffect(() => {
+    if (!profile) return
     ;(async () => {
       const response = await fetch(`api/profile/${profile}`)
       if (response.status !== 200) return setIsOpen(false)
       const result = await response.json()
       setProfileDetails(result)
-      setResetVisibleArea(!resetVisibleArea)
+      setResetVisibleArea((prev) => !prev)
     })()
-  }, [profile])
+  }, [profile, setIsOpen])
 
+  const visibleAreaHeight = visibleAreaRef.current?.getBoundingClientRect().height || 0
   useEffect(() => {
     if (!isMobileDevice) return
     if (visibleAreaRef.current) {
       const initialHeight = visibleAreaRef.current.getBoundingClientRect().height + 10
       setHeight(initialHeight)
     }
-  }, [visibleAreaRef.current?.getBoundingClientRect().height, resetVisibleArea])
+  }, [isMobileDevice, visibleAreaHeight, resetVisibleArea])
 
   useEffect(() => {
     if (!isMobileDevice) return
@@ -64,7 +66,7 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (panelRef && panelRef.current && !panelRef.current.contains(e.target as Node)) {
+      if (panelRef?.current && !panelRef.current.contains(e.target as Node)) {
         setIsOpen(false)
       }
     }
@@ -114,7 +116,7 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         style={{ height: isMobileDevice ? height : undefined }}
-        className={`${height >= window.innerHeight ? "" : "touch-none"} max-h-full z-100 bg-gray-50 grid justify-center-center fixed p-5 sm:p-8 bottom-0 sm:top-0 sm:right-0 w-full sm:w-1/4 sm:min-w-100 sm:h-full shadow-[0_-4px_6px_rgba(0,0,0,0.1)] border-t-2 sm:border-l-2 border-gray-200 overflow-y-scroll`}
+        className={`${height >= window.innerHeight ? "" : "touch-none"} max-h-full z-100 bg-gray-50 grid fixed p-5 sm:p-8 bottom-0 sm:top-0 sm:right-0 w-full sm:w-1/4 sm:min-w-100 sm:h-full shadow-[0_-4px_6px_rgba(0,0,0,0.1)] border-t-2 sm:border-l-2 border-gray-200 overflow-y-scroll`}
       >
         <div ref={visibleAreaRef}>
           <div className="h-2 rounded-full w-1/3 mx-auto my-3 bg-gray-200 sm:hidden" />
@@ -207,12 +209,14 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
           </p>
           <div className="bg-white p-1 my-2 rounded-sm">
             <Timeline
-              timelineData={profileDetails.commitDetails?.slice(0, 5).map((commit) => ({
-                date: commit.date,
-                icon: GitCommitHorizontal,
-                description: commit.message,
-                iconBackgroundColor: "#08872B",
-              })) || []}
+              timelineData={
+                profileDetails.commitDetails?.slice(0, 5).map((commit) => ({
+                  date: commit.date,
+                  icon: GitCommitHorizontal,
+                  description: commit.message,
+                  iconBackgroundColor: "#08872B",
+                })) || []
+              }
             />
           </div>
         </div>
