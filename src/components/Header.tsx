@@ -7,9 +7,7 @@ export default function Header() {
   const { theme, toggleTheme, mounted } = useTheme()
 
   return (
-    <header
-      className="sticky top-0 z-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-4 shadow-sm bg-[var(--header-bg)] border-b border-[var(--header-border)]"
-    >
+    <header className="sticky top-0 z-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-4 shadow-sm bg-[var(--header-bg)] border-b border-[var(--header-border)]">
       {/* Left Section: Logo + Title */}
       <div className="flex items-center gap-4">
         {mounted ? (
@@ -21,9 +19,7 @@ export default function Header() {
         ) : (
           <div className="w-16 h-16" />
         )}
-        <h1
-          className="text-xl font-semibold text-[var(--header-text)]"
-        >
+        <h1 className="text-xl font-semibold text-[var(--header-text)]">
           SLIIT Mozilla GitHub Leaderboard
         </h1>
       </div>
@@ -36,9 +32,9 @@ export default function Header() {
           aria-label="Toggle theme"
         >
           {theme === "light" ? (
-            <Moon size={24} className="text-[var(--icon-color)]" />
+            <Moon size={24} className="text-blue-400" />
           ) : (
-            <Sun size={24} className="text-[var(--icon-color)]" />
+            <Sun size={24} className="text-yellow-400" />
           )}
         </button>
 

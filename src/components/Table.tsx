@@ -96,12 +96,12 @@ export default function Table<T>({
                       className="text-xs leading-none cursor-pointer flex flex-col"
                     >
                       <div
-                        className={`${sortingColumn === header && sortingAscending ? 'text-[var(--sort-active)] opacity-100' : 'text-[var(--sort-inactive)] opacity-50'}`}
+                        className={`${sortingColumn === header && sortingAscending ? "text-[var(--sort-active)] opacity-100" : "text-[var(--sort-inactive)] opacity-50"}`}
                       >
                         ▲
                       </div>
                       <div
-                        className={`${sortingColumn === header && !sortingAscending ? 'text-[var(--sort-active)] opacity-100' : 'text-[var(--sort-inactive)] opacity-50'}`}
+                        className={`${sortingColumn === header && !sortingAscending ? "text-[var(--sort-active)] opacity-100" : "text-[var(--sort-inactive)] opacity-50"}`}
                       >
                         ▼
                       </div>

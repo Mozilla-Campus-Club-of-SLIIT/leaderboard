@@ -30,7 +30,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     document.documentElement.setAttribute("data-theme", newTheme)
   }
 
-  return <ThemeContext.Provider value={{ theme, toggleTheme, mounted }}>{children}</ThemeContext.Provider>
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme, mounted }}>
+      {children}
+    </ThemeContext.Provider>
+  )
 }
 
 export function useTheme() {
