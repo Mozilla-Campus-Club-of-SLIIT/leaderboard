@@ -52,20 +52,20 @@ export default function Home() {
   }, [isLeaderboardLoading, lastUpdated])
 
   return (
-    <main className="min-h-screen font-sans" style={{ backgroundColor: 'var(--background)', color: 'var(--foreground)' }}>
+    <main className="min-h-screen font-sans bg-[var(--background)] text-[var(--foreground)]">
       <Header />
       <section id="information" className="max-w-5xl m-auto px-6 pt-8">
         <div className="flex flex-col items-end justify-between md:flex-row gap-6">
           <div className="w-full md:w-1/2">
             <div className="flex justify-between items-center mb-2">
-              <h3 className="text-2xl font-bold mb-2" style={{ color: 'var(--heading-color)' }}>
+              <h3 className="text-2xl font-bold mb-2 text-[var(--heading-color)]">
                 Top Contributors
               </h3>
               <LeaderboardFilter value={view} onChange={setView} />
             </div>
             <p className="mb-2">
               Here's a spotlight on the most active contributors to the{" "}
-              <strong style={{ color: "var(--link-color)" }}>
+              <strong className="text-[var(--link-color)]">
                 Mozilla Campus Club of SLIIT
               </strong>
               .
@@ -74,22 +74,17 @@ export default function Home() {
               Want to be featured? Contribute to our{" "}
               <a
                 href="https://github.com/Mozilla-Campus-Club-of-SLIIT/"
-                className="hover:underline font-medium"
-                style={{ color: "var(--link-color)" }}
+                className="hover:underline font-medium text-[var(--link-color)]"
               >
                 Github organization
               </a>{" "}
               and climb the leaderboard.
             </p>
             {/* Desktop/tablet only */}
-            <h4 className="text-lg font-semibold mb-2 md:block hidden" style={{ color: 'var(--heading-color)' }}>
+            <h4 className="text-lg font-semibold mb-2 md:block hidden text-[var(--heading-color)]">
               How Points Are Calculated
             </h4>
-            <pre className="rounded p-4 mb-2 text-sm font-mono overflow-x-auto md:block hidden" style={{
-              backgroundColor: 'var(--code-bg)',
-              border: '1px solid var(--code-border)',
-              color: 'var(--code-text)'
-            }}>
+            <pre className="rounded p-4 mb-2 text-sm font-mono overflow-x-auto md:block hidden bg-[var(--code-bg)] border border-[var(--code-border)] text-[var(--code-text)]">
               <code>
                 <span className="text-purple-600">score</span> = commitCount *{" "}
                 <span className="text-green-600">{COMMIT_MULTIPLIER}</span> +{" "}
@@ -98,15 +93,14 @@ export default function Home() {
                 <span className="text-green-600">{CHANGESCORE_MULTIPLIER}</span>
               </code>
             </pre>
-            <div className="mb-2 md:block hidden" style={{ color: 'var(--text-color)' }}>
+            <div className="mb-2 md:block hidden text-[var(--text-color)]">
               Where <b>change score</b> is the quality of the changes made.
             </div>
             <p className="md:block hidden">
               Learn more about how we calculate this{" "}
               <a
                 href="https://github.com/Mozilla-Campus-Club-of-SLIIT/leaderboard/blob/main/src/utils/scoring.ts"
-                className="hover:underline font-medium"
-                style={{ color: "var(--link-color)" }}
+                className="hover:underline font-medium text-[var(--link-color)]"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -141,8 +135,7 @@ export default function Home() {
                 href={user.htmlUrl as string}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex gap-4 items-center pointer font-medium group relative hover:underline"
-                style={{ color: "var(--table-link-hover)" }}
+                className="flex gap-4 items-center pointer font-medium group relative hover:underline text-[var(--table-link-hover)]"
               >
                 <img
                   src={(user.avatarUrl || avatarPlaceholder.src) as string}
@@ -204,14 +197,10 @@ export default function Home() {
         </div>
         {/* Mobile only */}
         <div className="block md:hidden mt-6">
-          <h4 className="text-lg font-semibold mb-2" style={{ color: 'var(--heading-color)' }}>
+          <h4 className="text-lg font-semibold mb-2 text-[var(--heading-color)]">
             How Points Are Calculated
           </h4>
-          <pre className="rounded p-4 mb-2 text-sm font-mono overflow-x-auto" style={{
-            backgroundColor: 'var(--code-bg)',
-            border: '1px solid var(--code-border)',
-            color: 'var(--code-text)'
-          }}>
+          <pre className="rounded p-4 mb-2 text-sm font-mono overflow-x-auto bg-[var(--code-bg)] border border-[var(--code-border)] text-[var(--code-text)]">
             <code>
               <span className="text-purple-600">score</span> = commitCount *{" "}
               <span className="text-green-600">{COMMIT_MULTIPLIER}</span> +{" "}
@@ -220,15 +209,14 @@ export default function Home() {
               <span className="text-green-600">{CHANGESCORE_MULTIPLIER}</span>
             </code>
           </pre>
-          <div className="mb-2" style={{ color: 'var(--text-color)' }}>
+          <div className="mb-2 text-[var(--text-color)]">
             Where <b>change score</b> is the quality of the changes made.
           </div>
           <p>
             Learn more about how we calculate this{" "}
             <a
               href="https://github.com/Mozilla-Campus-Club-of-SLIIT/leaderboard/blob/main/src/utils/scoring.ts"
-              className="hover:underline font-medium"
-              style={{ color: "var(--link-color)" }}
+              className="hover:underline font-medium text-[var(--link-color)]"
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -8,11 +8,7 @@ export default function Header() {
 
   return (
     <header
-      className="sticky top-0 z-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-4 shadow-sm"
-      style={{
-        backgroundColor: "var(--header-bg)",
-        borderBottom: "1px solid var(--header-border)",
-      }}
+      className="sticky top-0 z-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-4 shadow-sm bg-[var(--header-bg)] border-b border-[var(--header-border)]"
     >
       {/* Left Section: Logo + Title */}
       <div className="flex items-center gap-4">
@@ -26,8 +22,7 @@ export default function Header() {
           <div className="w-16 h-16" />
         )}
         <h1
-          className="text-xl font-semibold"
-          style={{ color: "var(--header-text)" }}
+          className="text-xl font-semibold text-[var(--header-text)]"
         >
           SLIIT Mozilla GitHub Leaderboard
         </h1>
@@ -41,9 +36,9 @@ export default function Header() {
           aria-label="Toggle theme"
         >
           {theme === "light" ? (
-            <Moon size={24} style={{ color: "var(--icon-color)" }} />
+            <Moon size={24} className="text-[var(--icon-color)]" />
           ) : (
-            <Sun size={24} style={{ color: "var(--icon-color)" }} />
+            <Sun size={24} className="text-[var(--icon-color)]" />
           )}
         </button>
 
@@ -53,7 +48,7 @@ export default function Header() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Facebook size={24} style={{ color: "var(--icon-color)" }} />
+          <Facebook size={24} className="text-[var(--icon-color)]" />
         </a>
 
         <a
@@ -62,7 +57,7 @@ export default function Header() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Instagram size={24} style={{ color: "var(--icon-color)" }} />
+          <Instagram size={24} className="text-[var(--icon-color)]" />
         </a>
 
         <a
@@ -71,7 +66,7 @@ export default function Header() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Github size={24} style={{ color: "var(--icon-color)" }} />
+          <Github size={24} className="text-[var(--icon-color)]" />
         </a>
 
         <a
@@ -80,7 +75,7 @@ export default function Header() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Youtube size={24} style={{ color: "var(--icon-color)" }} />
+          <Youtube size={24} className="text-[var(--icon-color)]" />
         </a>
 
         <a
@@ -89,7 +84,7 @@ export default function Header() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Linkedin size={24} style={{ color: "var(--icon-color)" }} />
+          <Linkedin size={24} className="text-[var(--icon-color)]" />
         </a>
       </div>
     </header>
