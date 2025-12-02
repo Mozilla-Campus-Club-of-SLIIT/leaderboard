@@ -28,13 +28,13 @@ export default function Header() {
       <div className="flex items-center space-x-4">
         <button
           onClick={toggleTheme}
-          className="hover:opacity-70 transition-opacity p-1 cursor-pointer"
+          className="p-1 cursor-pointer transition-transform duration-200 transform hover:scale-125 hover:opacity-90"
           aria-label="Toggle theme"
         >
           {theme === "light" ? (
-            <Moon size={24} className="text-blue-400" />
+            <Moon size={24} strokeWidth={2.5} className="text-blue-400" />
           ) : (
-            <Sun size={24} className="text-yellow-400" />
+            <Sun size={24} strokeWidth={2.5} className="text-yellow-400" />
           )}
         </button>
 

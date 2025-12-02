@@ -64,7 +64,7 @@ export default function Home() {
               <LeaderboardFilter value={view} onChange={setView} />
             </div>
             <p className="mb-2">
-              Here&aposs a spotlight on the most active contributors to the{" "}
+              Here&apos;s a spotlight on the most active contributors to the{" "}
               <strong className="text-[var(--link-color)]">Mozilla Campus Club of SLIIT</strong>.
             </p>
             <p className="mb-6">
