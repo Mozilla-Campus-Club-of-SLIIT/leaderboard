@@ -24,7 +24,6 @@ export async function GET(request: NextRequest, ctx: RouteContext<"/api/leaderbo
       avatarUrl: user.avatarUrl,
       htmlUrl: user.htmlUrl,
       commits: user.commitCount,
-      commitDetails: user.commitDetails,
       changeScore: user.changeScore,
       overallScore: user.overallScore,
     })),
