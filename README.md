@@ -35,6 +35,22 @@ docker run -d \
 
 - Make sure you have Docker installed
 
+#### Running Upstash Redis via Cloud
+
+1. Go to [Upstash Redis](https://upstash.com/) and **create a free account**.
+2. Click **“Create Database”** and choose **REST API** (not the default Redis CLI) for serverless access.
+3. Once the database is created, copy:
+- **REST URL** → `UPSTASH_REDIS_REST_URL`
+- **Token** → `UPSTASH_REDIS_REST_TOKEN`
+4. Paste them into your `.env` file:
+
+```bash
+UPSTASH_REDIS_REST_URL=<your_upstash_rest_url>
+UPSTASH_REDIS_REST_TOKEN=<your_upstash_redis_token>
+```
+
+- Now your application can connect directly to Upstash Redis in the cloud without running Docker locally.
+
 Before starting the development server, install the project dependencies:
 
 ```bash
