@@ -1,4 +1,5 @@
-import { ReactNode, useEffect, useState } from "react"
+import { ReactNode, useEffect, useState, useMemo } from "react"
+import { generatePageNumbers } from "@/utils/pagination"
 
 type SortingMethod = "ascending" | "descending"
 
@@ -11,6 +12,11 @@ type TableProps<T> = {
   defaultSortingMethod?: SortingMethod
   columnToKeyMap?: Record<string, string>
   renderFunction?: (row: T, rowIndex: number) => (string | number | ReactNode)[]
+  currentPage?: number
+  itemsPerPage?: number
+  onPageChange?: (page: number) => void
+  siblingCount?: number
+  boundaryCount?: number
 }
 
 export default function Table<T>({
@@ -22,11 +28,27 @@ export default function Table<T>({
   defaultSortingMethod,
   columnToKeyMap,
   renderFunction,
+  currentPage = 1,
+  itemsPerPage,
+  onPageChange,
+  siblingCount = 0,
+  boundaryCount = 1,
 }: TableProps<T>) {
   const [sortingColumn, setSortingColumn] = useState(defaultSortingColumn)
   const [sortingAscending, setSortingAscending] = useState(defaultSortingMethod === "ascending")
   const [mappedRows, setMappedRows] = useState<ReactNode[][]>([])
   const [sortedRows, setSortedRows] = useState<T[]>([])
+
+  const totalPages = itemsPerPage ? Math.ceil(rows.length / itemsPerPage) : 1
+  const btnBase = "px-2 sm:px-3 py-1 text-sm rounded border shrink-0"
+  const btnNav = `${btnBase} border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed`
+  const paginatedRows = useMemo(
+    () =>
+      itemsPerPage
+        ? sortedRows.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+        : sortedRows,
+    [sortedRows, currentPage, itemsPerPage],
+  )
 
   useEffect(() => {
     if (!sortColumns || sortColumns.length === 0 || !sortingColumn) return setSortedRows(rows)
@@ -70,8 +92,24 @@ export default function Table<T>({
   }, [columnToKeyMap, headers, sortingAscending, sortColumns, sortingColumn, rows])
 
   useEffect(() => {
-    if (renderFunction) setMappedRows(sortedRows.map(renderFunction))
-  }, [renderFunction, sortedRows])
+    if (renderFunction) {
+      setMappedRows(
+        paginatedRows.map((row, idx) =>
+          renderFunction(row, (currentPage - 1) * (itemsPerPage || 0) + idx),
+        ),
+      )
+    }
+  }, [renderFunction, paginatedRows, currentPage, itemsPerPage])
+
+  useEffect(() => {
+    if (!itemsPerPage || !onPageChange) return
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft" && currentPage > 1) onPageChange(currentPage - 1)
+      if (e.key === "ArrowRight" && currentPage < totalPages) onPageChange(currentPage + 1)
+    }
+    globalThis.addEventListener("keydown", handleKey)
+    return () => globalThis.removeEventListener("keydown", handleKey)
+  }, [currentPage, totalPages, itemsPerPage, onPageChange])
 
   const changeSorting = (column: string) => {
     if (column === sortingColumn) setSortingAscending((prev) => !prev)
@@ -93,7 +131,7 @@ export default function Table<T>({
                   {sortColumns?.includes(header) && (
                     <div
                       onClick={() => changeSorting(header)}
-                      className="text-xs leading-none cursor-pointer flex flex-col"
+                      className="text-xs leading-none cursor-pointer"
                     >
                       <div
                         className={`${sortingColumn === header && sortingAscending ? "text-[var(--sort-active)] opacity-100" : "text-[var(--sort-inactive)] opacity-50"}`}
@@ -101,7 +139,9 @@ export default function Table<T>({
                         ▲
                       </div>
                       <div
-                        className={`${sortingColumn === header && !sortingAscending ? "text-[var(--sort-active)] opacity-100" : "text-[var(--sort-inactive)] opacity-50"}`}
+                        className={
+                          sortingColumn === header && !sortingAscending ? "text-gray-500" : ""
+                        }
                       >
                         ▼
                       </div>
@@ -130,23 +170,72 @@ export default function Table<T>({
               </td>
             </tr>
           ) : (
-            mappedRows.map((row: ReactNode[], rowIndex: number) => {
-              return (
-                <tr
-                  key={rowIndex}
-                  className="even:bg-[var(--table-row-even)] bg-[var(--table-bg)] hover:bg-[var(--table-hover)]"
-                >
-                  {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} className="px-4 py-3">
-                      {cell as ReactNode}
-                    </td>
-                  ))}
-                </tr>
-              )
-            })
+            mappedRows.map((row: ReactNode[], rowIndex: number) => (
+              <tr
+                key={rowIndex}
+                className="even:bg-[var(--table-row-even)] bg-[var(--table-bg)] hover:bg-[var(--table-hover)]"
+              >
+                {row.map((cell, cellIndex) => (
+                  <td key={cellIndex} className="px-4 py-3">
+                    {cell as ReactNode}
+                  </td>
+                ))}
+              </tr>
+            ))
           )}
         </tbody>
       </table>
+
+      {itemsPerPage && totalPages > 1 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-gray-200">
+          <div className="text-sm text-gray-700 text-center sm:text-left">
+            Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+            {Math.min(currentPage * itemsPerPage, rows.length)} of {rows.length} entries
+          </div>
+
+          <div className="flex flex-wrap gap-1 justify-center max-w-full">
+            <button
+              onClick={() => onPageChange?.(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={btnNav}
+            >
+              Previous
+            </button>
+
+            {generatePageNumbers(currentPage, totalPages, siblingCount, boundaryCount, 5).map(
+              (item, idx) =>
+                item === "ellipsis" ? (
+                  <span
+                    key={`ellipsis-${idx}`}
+                    className="px-1 sm:px-2 py-1 text-sm text-gray-500 shrink-0"
+                  >
+                    ...
+                  </span>
+                ) : (
+                  <button
+                    key={item}
+                    onClick={() => onPageChange?.(item)}
+                    className={`${btnBase} ${
+                      item === currentPage
+                        ? "bg-indigo-600 text-white border-indigo-600"
+                        : "border-gray-300 bg-white hover:bg-gray-50"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ),
+            )}
+
+            <button
+              onClick={() => onPageChange?.(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={btnNav}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

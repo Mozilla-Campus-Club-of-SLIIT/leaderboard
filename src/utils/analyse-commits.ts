@@ -56,7 +56,18 @@ export const analyseCommits = (
     }
 
     user.commits.push(commitMsg)
-    user.commitDetails.push({ message: commitMsg, date: commitDate })
+    user.commitDetails.push({
+      message: commitMsg,
+      date: commitDate,
+      files: commitFiles
+        .filter((f) => !ignoreFilesPattern.test(f.filename))
+        .map((f) => ({
+          filename: f.filename,
+          additions: f.additions,
+          deletions: f.deletions,
+          changes: f.changes,
+        })),
+    })
     user.commitCount += 1
     user.changeScore += changeScore
     // applying log10 will help the leaderboard to not break when there are 1000+ additions
