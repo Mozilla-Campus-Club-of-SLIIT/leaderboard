@@ -3,7 +3,7 @@ import { calculateChangeScore, calculateOverallScore } from "@/utils/scoring"
 
 export const filterCommitsByDate = (
   users: User[],
-  type: "daily" | "weekly" | "monthly" | "yearly",
+  type: "daily" | "weekly" | "monthly" | "yearly" | "last-month",
 ) => {
   const now = new Date()
   let from: Date
@@ -18,6 +18,9 @@ export const filterCommitsByDate = (
     case "monthly":
       from = new Date(now.getFullYear(), now.getMonth(), 1)
       break
+    case "last-month":
+      from = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+      break
     case "yearly":
       from = new Date(now.getFullYear(), 0, 1)
       break
@@ -28,7 +31,13 @@ export const filterCommitsByDate = (
   return users
     .map((user) => {
       // Filter commitDetails by date
-      const filteredCommitDetails = user.commitDetails.filter((c) => new Date(c.date) >= from)
+      const filteredCommitDetails = user.commitDetails.filter((c) => {
+        const date = new Date(c.date)
+        if (type === "last-month") {
+          return date >= from && date < new Date(now.getFullYear(), now.getMonth(), 1)
+        }
+        return date >= from
+      })
 
       // Recalculate commitCount
       const commitCount = filteredCommitDetails.length
