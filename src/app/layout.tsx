@@ -20,9 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={inter.variable}>
       <body className="min-h-screen flex flex-col overflow-x-hidden bg-white text-black antialiased font-sans">
         <Suspense>
-          <ThemeProvider>
-            {children}
-          </ThemeProvider>  
+          <ThemeProvider>{children}</ThemeProvider>
         </Suspense>
       </body>
     </html>

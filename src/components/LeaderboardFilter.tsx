@@ -8,9 +8,9 @@ const LeaderboardFilter: FC<Props> = ({ value, onChange }) => {
       onChange={(e) => onChange(e.target.value)}
       className="px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
       style={{
-        backgroundColor: "var(--select-bg)",
-        border: "1px solid var(--select-border)",
-        color: "var(--select-text)",
+        backgroundColor: "var(--component-bg)",
+        border: "1px solid var(--component-border)",
+        color: "var(--component-text)",
       }}
     >
       <option value="all">All Time</option>

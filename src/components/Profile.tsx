@@ -116,7 +116,7 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         style={{ height: isMobileDevice ? height : undefined }}
-        className={`${height >= window.innerHeight ? "" : "touch-none"} max-h-full z-100 bg-gray-50 grid fixed p-5 sm:p-8 bottom-0 sm:top-0 sm:right-0 w-full sm:w-1/4 sm:min-w-100 sm:h-full shadow-[0_-4px_6px_rgba(0,0,0,0.1)] border-t-2 sm:border-l-2 border-gray-200 overflow-y-scroll`}
+        className={`${height >= window.innerHeight ? "" : "touch-none"} max-h-full z-100 bg-[var(--component-bg)] grid fixed p-5 sm:p-8 bottom-0 sm:top-0 sm:right-0 w-full sm:w-1/4 sm:min-w-100 sm:h-full shadow-[0_-4px_6px_rgba(0,0,0,0.1)] border-t-2 sm:border-l-2 border-[var(--component-border)] overflow-y-scroll`}
       >
         <div ref={visibleAreaRef}>
           <div className="h-2 rounded-full w-1/3 mx-auto my-3 bg-gray-200 sm:hidden" />
@@ -130,12 +130,14 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
               alt={profileDetails.name}
             />
             <div className="relative w-full">
-              <h4 className="font-bold w-11/12 text-2xl text-gray-700 truncate">{profile}</h4>
+              <h4 className="font-bold w-11/12 text-2xl text-(var(--header-text)) truncate">
+                {profile}
+              </h4>
               <a
                 href={profileDetails.htmlUrl as string}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full flex my-2 items-center cursor-pointer text-indigo-600 hover:underline font-medium group"
+                className="w-full flex my-2 items-center cursor-pointer text-[var(--link-color)] hover:underline font-medium group"
               >
                 <Github color="black" size={20} />
                 <span className="truncate absolute left-[25px] w-9/10">
@@ -161,7 +163,9 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
           <hr />
         </div>
         <div className="my-2">
-          <h5 className="font-bold text-xl text-gray-700 my-2">Contribution breakdown</h5>
+          <h5 className="font-bold text-xl text-(var(--header-text)) my-2">
+            Contribution breakdown
+          </h5>
           <div className="grid gap-2 grid-cols-4 [&>div]:py-3 [&>div]:rounded-md [&>div]:opacity-80 [&>div]:shadow-sm [&>div]:aspect-square [&>div]:grid [&>div]:text-center [&>div]:items-center [&>div]:font-bold [&>div]:border [&>div]:border-violet-700">
             <div>
               <Rocket size={28} className="mx-auto" color="#f54900" />
@@ -201,13 +205,13 @@ export default function Profile({ isOpen, setIsOpen, profile }: ProfileProps) {
           </div>
         </div>
         <div className="my-2">
-          <h5 className="font-bold text-xl text-gray-700 my-2">Recent commits</h5>
+          <h5 className="font-bold text-xl text-(var(--header-text)) my-2">Recent commits</h5>
           <p className="font-light text-sm">
             <span className="font-normal">{profileDetails.name}</span> has committed{" "}
             <span className="font-normal">{profileDetails.commitCount}</span> times to the
             organization
           </p>
-          <div className="bg-white p-1 my-2 rounded-sm">
+          <div className="bg-[var(--background)] p-1 my-2 rounded-sm">
             <Timeline
               timelineData={
                 profileDetails.commitDetails?.slice(0, 5).map((commit) => ({

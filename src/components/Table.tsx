@@ -41,7 +41,7 @@ export default function Table<T>({
 
   const totalPages = itemsPerPage ? Math.ceil(rows.length / itemsPerPage) : 1
   const btnBase = "px-2 sm:px-3 py-1 text-sm rounded border shrink-0"
-  const btnNav = `${btnBase} border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed`
+  const btnNav = `${btnBase} border-[var(--component-border)] bg-[var(--component-bg)] hover:bg-[var(--component-hover)] disabled:opacity-50 disabled:cursor-not-allowed`
   const paginatedRows = useMemo(
     () =>
       itemsPerPage
@@ -218,7 +218,7 @@ export default function Table<T>({
                     className={`${btnBase} ${
                       item === currentPage
                         ? "bg-indigo-600 text-white border-indigo-600"
-                        : "border-gray-300 bg-white hover:bg-gray-50"
+                        : "bg-[var(--component-bg)] border-[var(--component-border)] text-[var(--component-text)]"
                     }`}
                   >
                     {item}
