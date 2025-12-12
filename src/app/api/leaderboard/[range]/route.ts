@@ -6,7 +6,7 @@ import { NextRequest } from "next/server"
 
 export async function GET(request: NextRequest, ctx: RouteContext<"/api/leaderboard/[range]">) {
   const params = await ctx.params
-  const validRanges = ["daily", "weekly", "monthly", "yearly", "all"]
+  const validRanges = ["daily", "weekly", "monthly", "yearly", "last-month", "all"]
   const range = validRanges.includes(params.range) ? params.range : "all"
 
   let leaders = (await redis.get("leaders")) as User[] | null
@@ -15,7 +15,10 @@ export async function GET(request: NextRequest, ctx: RouteContext<"/api/leaderbo
   if (!leaders) return Response.json({ body: "Cannot fetch leaderboard now" }, { status: 503 })
 
   if (range !== "all") {
-    leaders = filterCommitsByDate(leaders, range as "daily" | "weekly" | "monthly" | "yearly")
+    leaders = filterCommitsByDate(
+      leaders,
+      range as "daily" | "weekly" | "monthly" | "yearly" | "last-month",
+    )
   }
 
   return Response.json(

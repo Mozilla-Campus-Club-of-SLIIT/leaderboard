@@ -17,6 +17,7 @@ const LeaderboardFilter: FC<Props> = ({ value, onChange }) => {
       <option value="daily">Today</option>
       <option value="weekly">This Week</option>
       <option value="monthly">This Month</option>
+      <option value="last-month">Last Month</option>
       <option value="yearly">This Year</option>
     </select>
   )
