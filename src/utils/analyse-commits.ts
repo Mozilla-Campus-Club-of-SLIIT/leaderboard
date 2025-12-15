@@ -33,6 +33,10 @@ export const analyseCommits = (
     const authorName = "login" in author ? author.login : author.name
     if (!authorName) continue
 
+    // Exclude bots/apps by checking against a list of patterns
+    const excludePatterns = ["[bot]", "[app]"]
+    if (excludePatterns.some((pattern) => authorName.toLowerCase().includes(pattern))) continue
+
     let user = results.find((u) => u.name === authorName)
 
     if (!user) {
