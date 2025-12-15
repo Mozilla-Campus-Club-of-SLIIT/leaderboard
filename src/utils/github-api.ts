@@ -26,14 +26,13 @@ export class GitHubAPI {
   }
 
   async getCommits(repo: string) {
-    const response = await this.octokit.repos.listCommits({
+    const commits = await this.octokit.paginate(this.octokit.repos.listCommits, {
       owner: this.owner,
       repo,
       per_page: 100,
     })
 
-    const commits = Promise.all(response.data.map((commit) => this.getCommit(commit.sha, repo)))
-    return commits
+    return Promise.all(commits.map((c) => this.getCommit(c.sha, repo)))
   }
 
   async getCommit(ref: string, repo: string) {
