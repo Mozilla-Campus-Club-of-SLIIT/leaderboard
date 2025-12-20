@@ -1,8 +1,63 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f3f4f6;
-  --foreground: #171717;
+  --background: theme(colors.gray.50);
+  --foreground: theme(colors.gray.900);
+  --link-color: theme(colors.indigo.600);
+  --heading-color: theme(colors.gray.800);
+  --text-color: theme(colors.gray.700);
+  --code-bg: theme(colors.white);
+  --code-border: theme(colors.gray.300);
+  --code-text: theme(colors.gray.700);
+  --component-bg: theme(colors.white);
+  --component-hover: theme(colors.gray.100);
+  --component-border: theme(colors.gray.300);
+  --component-text: theme(colors.gray.900);
+  --table-bg: theme(colors.white);
+  --table-border: theme(colors.gray.200);
+  --table-header-bg: theme(colors.gray.100);
+  --table-header-text: theme(colors.gray.600);
+  --table-text: theme(colors.gray.600);
+  --table-row-even: theme(colors.gray.100);
+  --table-hover: theme(colors.gray.200);
+  --table-link: theme(colors.gray.200);
+  --table-link-hover: theme(colors.indigo.600);
+  --header-bg: theme(colors.white);
+  --header-border: theme(colors.gray.200);
+  --header-text: theme(colors.gray.800);
+  --icon-color: theme(colors.gray.900);
+  --sort-active: theme(colors.gray.500);
+  --sort-inactive: theme(colors.gray.300);
+}
+
+[data-theme="dark"] {
+  --background: theme(colors.gray.900);
+  --foreground: theme(colors.gray.200);
+  --link-color: theme(colors.sky.400);
+  --heading-color: theme(colors.white);
+  --text-color: theme(colors.gray.200);
+  --code-bg: theme(colors.gray.800);
+  --code-border: theme(colors.gray.600);
+  --code-text: theme(colors.gray.200);
+  --component-bg: theme(colors.gray.800);
+  --component-hover: theme(colors.gray.900);
+  --component-border: theme(colors.gray.600);
+  --component-text: theme(colors.gray.200);
+  --table-bg: theme(colors.gray.900);
+  --table-border: theme(colors.gray.700);
+  --table-header-bg: theme(colors.gray.800);
+  --table-header-text: theme(colors.gray.300);
+  --table-text: theme(colors.gray.200);
+  --table-row-even: theme(colors.gray.800);
+  --table-hover: theme(colors.gray.700);
+  --table-link: theme(colors.gray.200);
+  --table-link-hover: theme(colors.sky.400);
+  --header-bg: theme(colors.gray.950);
+  --header-border: theme(colors.gray.700);
+  --header-text: theme(colors.gray.200);
+  --icon-color: theme(colors.gray.200);
+  --sort-active: theme(colors.gray.100);
+  --sort-inactive: theme(colors.gray.200);
 }
 
 @theme inline {
@@ -14,4 +69,6 @@
 
 body {
   @apply bg-background text-foreground font-sans;
+  background-color: var(--background);
+  color: var(--foreground);
 }

@@ -76,7 +76,7 @@ export default function Home() {
   }
 
   return (
-    <main className="bg-gray-50 text-gray-800 min-h-screen font-sans">
+    <main className="min-h-screen font-sans bg-[var(--background)] text-[var(--foreground)]">
       <Profile
         isOpen={isProfileContainerOpen}
         setIsOpen={setIsProfileContainerOpen}
@@ -87,28 +87,30 @@ export default function Home() {
         <div className="flex flex-col items-end justify-between md:flex-row gap-6">
           <div className="w-full md:w-1/2">
             <div className="flex justify-between items-center mb-2">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Top Contributors</h3>
+              <h3 className="text-2xl font-bold mb-2 text-[var(--heading-color)]">
+                Top Contributors
+              </h3>
               <LeaderboardFilter value={view} onChange={setView} />
             </div>
             <p className="mb-2">
-              Here’s a spotlight on the most active contributors to the{" "}
-              <strong className="text-indigo-600">Mozilla Campus Club of SLIIT</strong>.
+              Here&apos;s a spotlight on the most active contributors to the{" "}
+              <strong className="text-[var(--link-color)]">Mozilla Campus Club of SLIIT</strong>.
             </p>
             <p className="mb-6">
               Want to be featured? Contribute to our{" "}
               <a
                 href="https://github.com/Mozilla-Campus-Club-of-SLIIT/"
-                className="text-indigo-600 hover:underline font-medium"
+                className="hover:underline font-medium text-[var(--link-color)]"
               >
                 Github organization
               </a>{" "}
               and climb the leaderboard.
             </p>
             {/* Desktop/tablet only */}
-            <h4 className="text-lg font-semibold text-gray-800 mb-2 md:block hidden">
+            <h4 className="text-lg font-semibold mb-2 md:block hidden text-[var(--heading-color)]">
               How Points Are Calculated
             </h4>
-            <pre className="bg-white border border-gray-300 rounded p-4 mb-2 text-sm font-mono text-gray-800 overflow-x-auto md:block hidden">
+            <pre className="rounded p-4 mb-2 text-sm font-mono overflow-x-auto md:block hidden bg-[var(--code-bg)] border border-[var(--code-border)] text-[var(--code-text)]">
               <code>
                 <span className="text-purple-600">score</span> = commitCount *{" "}
                 <span className="text-green-600">{COMMIT_MULTIPLIER}</span> +{" "}
@@ -117,14 +119,14 @@ export default function Home() {
                 <span className="text-green-600">{CHANGESCORE_MULTIPLIER}</span>
               </code>
             </pre>
-            <div className="text-gray-700 mb-2 md:block hidden">
+            <div className="mb-2 md:block hidden text-[var(--text-color)]">
               Where <b>change score</b> is the quality of the changes made.
             </div>
             <p className="md:block hidden">
               Learn more about how we calculate this{" "}
               <a
                 href="https://github.com/Mozilla-Campus-Club-of-SLIIT/leaderboard/blob/main/src/utils/scoring.ts"
-                className="text-indigo-600 hover:underline font-medium"
+                className="hover:underline font-medium text-[var(--link-color)]"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -156,7 +158,7 @@ export default function Home() {
             user.htmlUrl ? (
               <button
                 onClick={() => openProfile(user.name)}
-                className="flex gap-4 items-center cursor-pointer text-indigo-600 hover:underline font-medium group relative"
+                className="flex gap-4 items-center cursor-pointer hover:underline font-medium group relative text-[var(--table-link-hover)]"
               >
                 <img
                   src={(user.avatarUrl || avatarPlaceholder.src) as string}
@@ -225,8 +227,10 @@ export default function Home() {
         </div>
         {/* Mobile only */}
         <div className="block md:hidden mt-6">
-          <h4 className="text-lg font-semibold text-gray-800 mb-2">How Points Are Calculated</h4>
-          <pre className="bg-white border border-gray-300 rounded p-4 mb-2 text-sm font-mono text-gray-800 overflow-x-auto">
+          <h4 className="text-lg font-semibold mb-2 text-[var(--heading-color)]">
+            How Points Are Calculated
+          </h4>
+          <pre className="rounded p-4 mb-2 text-sm font-mono overflow-x-auto bg-[var(--code-bg)] border border-[var(--code-border)] text-[var(--code-text)]">
             <code>
               <span className="text-purple-600">score</span> = commitCount *{" "}
               <span className="text-green-600">{COMMIT_MULTIPLIER}</span> +{" "}
@@ -235,14 +239,14 @@ export default function Home() {
               <span className="text-green-600">{CHANGESCORE_MULTIPLIER}</span>
             </code>
           </pre>
-          <div className="text-gray-700 mb-2">
+          <div className="mb-2 text-[var(--text-color)]">
             Where <b>change score</b> is the quality of the changes made.
           </div>
           <p>
             Learn more about how we calculate this{" "}
             <a
               href="https://github.com/Mozilla-Campus-Club-of-SLIIT/leaderboard/blob/main/src/utils/scoring.ts"
-              className="text-indigo-600 hover:underline font-medium"
+              className="hover:underline font-medium text-[var(--link-color)]"
               target="_blank"
               rel="noopener noreferrer"
             >

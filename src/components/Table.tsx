@@ -41,7 +41,7 @@ export default function Table<T>({
 
   const totalPages = itemsPerPage ? Math.ceil(rows.length / itemsPerPage) : 1
   const btnBase = "px-2 sm:px-3 py-1 text-sm rounded border shrink-0"
-  const btnNav = `${btnBase} border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed`
+  const btnNav = `${btnBase} border-[var(--component-border)] bg-[var(--component-bg)] hover:bg-[var(--component-hover)] disabled:opacity-50 disabled:cursor-not-allowed`
   const paginatedRows = useMemo(
     () =>
       itemsPerPage
@@ -120,72 +120,73 @@ export default function Table<T>({
   }
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
-      <div className="overflow-x-auto">
-        <table className="min-w-full text-sm text-left text-gray-700">
-          <thead className="bg-gray-100 text-gray-600 uppercase tracking-wider">
-            <tr>
-              {headers.map((header, index) => (
-                <th key={index} className="px-4 py-3">
-                  <div className="flex gap-3 items-center">
-                    <div>{header}</div>
-                    {sortColumns?.includes(header) && (
+    <div className="overflow-x-auto rounded-lg shadow-sm border border-[var(--table-border)] bg-[var(--table-bg)]">
+      <table className="min-w-full text-sm text-left text-[var(--table-text)]">
+        <thead className="uppercase tracking-wider bg-[var(--table-header-bg)] text-[var(--table-header-text)]">
+          <tr>
+            {headers.map((header, index) => (
+              <th key={index} className="px-4 py-3">
+                <div className="flex gap-3 items-center">
+                  <div>{header}</div>
+                  {sortColumns?.includes(header) && (
+                    <div
+                      onClick={() => changeSorting(header)}
+                      className="text-xs leading-none cursor-pointer"
+                    >
                       <div
-                        onClick={() => changeSorting(header)}
-                        className="text-xs leading-none text-gray-300 cursor-pointer"
+                        className={`${sortingColumn === header && sortingAscending ? "text-[var(--sort-active)] opacity-100" : "text-[var(--sort-inactive)] opacity-50"}`}
                       >
-                        <div
-                          className={
-                            sortingColumn === header && sortingAscending ? "text-gray-500" : ""
-                          }
-                        >
-                          ▲
-                        </div>
-                        <div
-                          className={
-                            sortingColumn === header && !sortingAscending ? "text-gray-500" : ""
-                          }
-                        >
-                          ▼
-                        </div>
+                        ▲
                       </div>
-                    )}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading ? (
-              Array.from({ length: 5 }).map((_, rowIndex) => (
-                <tr key={rowIndex} className="animate-pulse">
-                  {Array.from({ length: headers.length }).map((_, cellIndex) => (
-                    <td key={cellIndex} className="px-4 py-3">
-                      <div className="h-6 bg-gray-300 rounded w-full"></div>
-                    </td>
-                  ))}
-                </tr>
-              ))
-            ) : rows.length === 0 ? (
-              <tr className="hover:bg-gray-200">
-                <td key="table-no-data" className="px-4 py-3" colSpan={headers.length}>
-                  No data
-                </td>
+                      <div
+                        className={
+                          sortingColumn === header && !sortingAscending
+                            ? "text-[var(--sort-active)] opacity-100"
+                            : "text-[var(--sort-inactive)] opacity-50"
+                        }
+                      >
+                        ▼
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {isLoading ? (
+            Array.from({ length: 5 }).map((_, rowIndex) => (
+              <tr key={rowIndex} className="animate-pulse">
+                {Array.from({ length: headers.length }).map((_, cellIndex) => (
+                  <td key={cellIndex} className="px-4 py-3">
+                    <div className="h-6 rounded w-full bg-[var(--table-row-even)]"></div>
+                  </td>
+                ))}
               </tr>
-            ) : (
-              mappedRows.map((row: ReactNode[], rowIndex: number) => (
-                <tr key={rowIndex} className="nth-[even]:bg-gray-100 hover:bg-gray-200">
-                  {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} className="px-4 py-3">
-                      {cell as ReactNode}
-                    </td>
-                  ))}
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+            ))
+          ) : rows.length === 0 ? (
+            <tr className="bg-[var(--table-hover)]">
+              <td key="table-no-data" className="px-4 py-3" colSpan={headers.length}>
+                No data
+              </td>
+            </tr>
+          ) : (
+            mappedRows.map((row: ReactNode[], rowIndex: number) => (
+              <tr
+                key={rowIndex}
+                className="even:bg-[var(--table-row-even)] bg-[var(--table-bg)] hover:bg-[var(--table-hover)]"
+              >
+                {row.map((cell, cellIndex) => (
+                  <td key={cellIndex} className="px-4 py-3">
+                    {cell as ReactNode}
+                  </td>
+                ))}
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
 
       {itemsPerPage && totalPages > 1 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-gray-200">
@@ -219,7 +220,7 @@ export default function Table<T>({
                     className={`${btnBase} ${
                       item === currentPage
                         ? "bg-indigo-600 text-white border-indigo-600"
-                        : "border-gray-300 bg-white hover:bg-gray-50"
+                        : "bg-[var(--component-bg)] border-[var(--component-border)] text-[var(--component-text)]"
                     }`}
                   >
                     {item}

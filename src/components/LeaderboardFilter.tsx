@@ -6,7 +6,12 @@ const LeaderboardFilter: FC<Props> = ({ value, onChange }) => {
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="border border-gray-300 rounded-md px-2 py-1 text-gray-700 focus:ring focus:ring-indigo-200"
+      className="px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
+      style={{
+        backgroundColor: "var(--component-bg)",
+        border: "1px solid var(--component-border)",
+        color: "var(--component-text)",
+      }}
     >
       <option value="all">All Time</option>
       <option value="daily">Today</option>

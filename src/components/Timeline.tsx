@@ -33,8 +33,8 @@ const Timeline = ({ timelineData }: TimelineProps) => {
               <Icon color="white" size={16} />
             </div>
             <div className="ml-10">
-              <p className="font-bold text-gray-800">{item.title}</p>
-              <p className="text-gray-800">{item.description}</p>
+              <p className="font-bold text-[var(--text-color)]">{item.title}</p>
+              <p className="text-[var(--text-color)]">{item.description}</p>
               <p className="text-gray-400 text-sm">{item.date}</p>
             </div>
           </div>
