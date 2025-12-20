@@ -11,7 +11,7 @@ export async function updateLeaderboard() {
   const client = new GitHubAPI(GITHUB_TOKEN, GITHUB_OWNER)
 
   const repos = await client.getOrgRepos()
-  let commits: Endpoints["GET /repos/{owner}/{repo}/commits"]["response"]["data"][number][] = []
+  const commits: Endpoints["GET /repos/{owner}/{repo}/commits"]["response"]["data"][number][] = []
   const results = await Promise.allSettled(repos.map((repo) => client.getCommits(repo)))
 
   for (const r of results) {
