@@ -140,7 +140,9 @@ export default function Table<T>({
                       </div>
                       <div
                         className={
-                          sortingColumn === header && !sortingAscending ? "text-gray-500" : ""
+                          sortingColumn === header && !sortingAscending
+                            ? "text-[var(--sort-active)] opacity-100"
+                            : "text-[var(--sort-inactive)] opacity-50"
                         }
                       >
                         ▼
