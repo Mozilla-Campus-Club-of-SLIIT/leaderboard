@@ -12,12 +12,13 @@ export async function updateLeaderboard() {
 
   const repos = await client.getOrgRepos()
   let commits: Endpoints["GET /repos/{owner}/{repo}/commits"]["response"]["data"][number][] = []
-  for (const repo of repos) {
-    try {
-      const repoCommits = await client.getCommits(repo)
-      commits = [...commits, ...repoCommits]
-    } catch (err) {
-      console.warn(err)
+  const results = await Promise.allSettled(repos.map((repo) => client.getCommits(repo)))
+
+  for (const r of results) {
+    if (r.status === "fulfilled") {
+      commits.push(...r.value)
+    } else {
+      console.warn(r.reason)
     }
   }
 
