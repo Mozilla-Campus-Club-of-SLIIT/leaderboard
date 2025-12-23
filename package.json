@@ -12,6 +12,7 @@
     "format:check": "prettier --check \"src/**/*.{js,ts,jsx,tsx,json,css,md}\""
   },
   "dependencies": {
+    "@octokit/plugin-throttling": "^11.0.3",
     "@octokit/rest": "^22.0.0",
     "@upstash/redis": "^1.35.3",
     "lucide-react": "^0.548.0",

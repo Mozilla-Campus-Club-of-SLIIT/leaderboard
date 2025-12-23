@@ -1,3 +1,4 @@
+import { throttling } from "@octokit/plugin-throttling"
 import { Octokit } from "@octokit/rest"
 
 export class GitHubAPI {
@@ -5,7 +6,28 @@ export class GitHubAPI {
   private owner: string
 
   constructor(token: string, owner: string) {
-    this.octokit = new Octokit({ auth: token })
+    const ThrottlingOctokit = Octokit.plugin(throttling)
+    this.octokit = new ThrottlingOctokit({
+      auth: token,
+      throttle: {
+        onRateLimit(retryAfter, options, octokit, retryCount) {
+          octokit.log.warn(`Request quota exhausted for request ${options.method} ${options.url}`)
+          if (retryCount < 3) {
+            octokit.log.info(`Retrying after ${retryAfter} seconds!`)
+            return true
+          }
+        },
+        onSecondaryRateLimit(retryAfter, options, octokit, retryCount) {
+          octokit.log.warn(
+            `SecondaryRateLimit detected for request ${options.method} ${options.url}`,
+          )
+          if (retryCount < 3) {
+            octokit.log.info(`Retrying after ${retryAfter} seconds!`)
+            return true
+          }
+        },
+      },
+    })
     this.owner = owner
   }
 
