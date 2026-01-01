@@ -111,9 +111,7 @@ export default function Home() {
             <pre className="bg-white border border-gray-300 rounded p-4 mb-2 text-sm font-mono text-gray-800 overflow-x-auto md:block hidden">
               <code>
                 <span className="text-purple-600">score</span> = commitCount *{" "}
-                <span className="text-green-600">{COMMIT_MULTIPLIER}</span> +{" "}
-                <span className="text-pink-600">log10</span>
-                (changeScore + <span className="text-green-600">1</span>) *{" "}
+                <span className="text-green-600">{COMMIT_MULTIPLIER}</span> + changeScore *{" "}
                 <span className="text-green-600">{CHANGESCORE_MULTIPLIER}</span>
               </code>
             </pre>
@@ -229,9 +227,7 @@ export default function Home() {
           <pre className="bg-white border border-gray-300 rounded p-4 mb-2 text-sm font-mono text-gray-800 overflow-x-auto">
             <code>
               <span className="text-purple-600">score</span> = commitCount *{" "}
-              <span className="text-green-600">{COMMIT_MULTIPLIER}</span> +{" "}
-              <span className="text-pink-600">log10</span>
-              (changeScore + <span className="text-green-600">1</span>) *{" "}
+              <span className="text-green-600">{COMMIT_MULTIPLIER}</span> + changeScore *{" "}
               <span className="text-green-600">{CHANGESCORE_MULTIPLIER}</span>
             </code>
           </pre>
