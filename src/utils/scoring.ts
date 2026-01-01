@@ -68,7 +68,7 @@ const logistic = (L: number, k: number, x0: number, x: number) => L / (1 + Math.
 export const calculateChangeScore = (additions: number, deletions: number) => {
   const effectiveAdditions =
     additions < LOW_EFFORT_CHANGE_THRESHOLD ? LOW_EFFORT_CHANGE_PENALTY : additions
-  // logisitc function for linear gain upto a certain point, then saturate
+  // logistic function for linear gain upto a certain point, then saturate
   return logistic(
     LOGISTIC_L,
     LOGISTIC_K,
