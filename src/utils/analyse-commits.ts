@@ -74,8 +74,6 @@ export const analyseCommits = (
     })
     user.commitCount += 1
     user.changeScore += changeScore
-    // applying log10 will help the leaderboard to not break when there are 1000+ additions
-    // we apply little bit more weight to the change score so people can't get to top with just spam commits
     user.overallScore = calculateOverallScore(user.commitCount, user.changeScore)
 
     for (const category of commitCategories) {
